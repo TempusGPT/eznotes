@@ -1,4 +1,13 @@
 import { render } from "solid-js/web";
-import { App } from "~/App";
+import { Router, Route } from "@solidjs/router";
+import { Home } from "~/pages/Home";
+import { About } from "~/pages/About";
 
-render(() => <App />, document.body);
+const code = () => (
+    <Router>
+        <Route path="/" component={Home} />
+        <Route path="/about" component={About} />
+    </Router>
+);
+
+render(code, document.body);
