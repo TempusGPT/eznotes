@@ -1,1 +1,1 @@
-<div>404 Not Found</div>
+<div>NotFound</div>
