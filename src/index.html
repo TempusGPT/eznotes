@@ -2,17 +2,13 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="stylesheet" type="text/css" href="/index.scss" />
+        <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Vite + Svelte + TS</title>
     </head>
     <body>
         <div id="root"></div>
-        <script type="module">
-            import { mount } from "svelte";
-            import index from "/index.svelte";
-            mount(index, { target: document.getElementById("root") });
-        </script>
+        <script type="module" src="/index.ts"></script>
     </body>
 </html>

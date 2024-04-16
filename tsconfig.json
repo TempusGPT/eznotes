@@ -13,5 +13,5 @@
             "~/*": ["src/*"]
         }
     },
-    "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "app/index.ts", "app/index.svelte"]
+    "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"]
 }
