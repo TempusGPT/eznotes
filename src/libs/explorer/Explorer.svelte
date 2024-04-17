@@ -23,9 +23,9 @@
 <style lang="scss">
     .list {
         width: 100%;
-        text-align: left;
         padding: 0.25em 0;
-        background-color: transparent;
         border: none;
+        background-color: transparent;
+        text-align: left;
     }
 </style>

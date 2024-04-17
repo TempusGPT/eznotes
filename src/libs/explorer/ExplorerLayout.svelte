@@ -34,6 +34,13 @@
 </main>
 
 <style lang="scss">
+    article {
+        height: calc(100vh - var(--pico-block-spacing-vertical) * 2);
+        margin: 0;
+        padding: calc(var(--pico-block-spacing-vertical) * 2)
+            calc(var(--pico-block-spacing-horizontal) * 2);
+    }
+
     .grid {
         grid-template-columns: 18em 1fr;
     }
