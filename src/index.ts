@@ -1,12 +1,12 @@
 import { mount } from "svelte";
 import Router from "svelte-spa-router";
 
-import Home from "~/pages/Home.svelte";
 import Editor from "~/pages/Editor.svelte";
 import Explorer from "~/pages/Explorer.svelte";
+import Home from "~/pages/Home.svelte";
+import NotFound from "~/pages/NotFound.svelte";
 import Settings from "~/pages/Settings.svelte";
 import SignIn from "~/pages/SignIn.svelte";
-import NotFound from "~/pages/NotFound.svelte";
 
 const routes = {
     "/": Home,
@@ -17,6 +17,7 @@ const routes = {
     "/*": NotFound,
 };
 
+window.location.hash = "/";
 mount(Router, {
     target: document.getElementById("root")!,
     props: { routes },
