@@ -1,20 +1,18 @@
 import { mount } from "svelte";
 import Router from "svelte-spa-router";
 
-import Editor from "~/pages/Editor.svelte";
-import Explorer from "~/pages/Explorer.svelte";
-import Home from "~/pages/Home.svelte";
-import NotFound from "~/pages/NotFound.svelte";
-import Settings from "~/pages/Settings.svelte";
-import SignIn from "~/pages/SignIn.svelte";
+import EditorPage from "~/pages/EditorPage.svelte";
+import ErrorPage from "~/pages/ErrorPage.svelte";
+import HomePage from "~/pages/HomePage.svelte";
+import LoginPage from "~/pages/LoginPage.svelte";
+import SettingsPage from "~/pages/SettingsPage.svelte";
 
 const routes = {
-    "/": Home,
-    "/notes": Explorer, // redirect /signin if not auth
-    "/notes/:id": Editor, // redirect /signin if not auth
-    "/settings": Settings, // redirect /signin if not auth
-    "/signin": SignIn,
-    "/*": NotFound,
+    "/": HomePage,
+    "/notes/:id": EditorPage,
+    "/settings": SettingsPage,
+    "/login": LoginPage,
+    "/*": ErrorPage,
 };
 
 window.location.hash = "/";
