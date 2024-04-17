@@ -6,8 +6,26 @@
     ] as const;
 </script>
 
-<ul>
+<script lang="ts">
+    import { push } from "svelte-spa-router";
+
+    const handleClick = (id: number) => () => {
+        push(`/notes/${id}`);
+    };
+</script>
+
+<div>
     {#each MOCKUP as { id, path }}
-        <li>{id}: {path}</li>
+        <button class="list" onclick={handleClick(id)}>{id}: {path}</button>
     {/each}
-</ul>
+</div>
+
+<style lang="scss">
+    .list {
+        width: 100%;
+        text-align: left;
+        padding: 0.25em 0;
+        background-color: transparent;
+        border: none;
+    }
+</style>
