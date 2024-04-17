@@ -6,11 +6,8 @@
     ] as const;
 </script>
 
-<div>
-    <h2>Explorer</h2>
-    <ul>
-        {#each MOCKUP as { id, path }}
-            <li>{id}: {path}</li>
-        {/each}
-    </ul>
-</div>
+<ul>
+    {#each MOCKUP as { id, path }}
+        <li>{id}: {path}</li>
+    {/each}
+</ul>

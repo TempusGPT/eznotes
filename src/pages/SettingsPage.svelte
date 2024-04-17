@@ -1,1 +1,7 @@
-<div>Settings</div>
+<script lang="ts">
+    import ExplorerLayout from "~/libs/explorer/ExplorerLayout.svelte";
+</script>
+
+<ExplorerLayout>
+    <div>Settings</div>
+</ExplorerLayout>

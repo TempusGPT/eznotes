@@ -1,10 +1,7 @@
-<script>
-    import Explorer from "~/libs/Explorer.svelte";
+<script lang="ts">
+    import ExplorerLayout from "~/libs/explorer/ExplorerLayout.svelte";
 </script>
 
-<main class="container-fluid">
-    <div class="grid">
-        <Explorer />
-        <article>Some content</article>
-    </div>
-</main>
+<ExplorerLayout explorerOnMobile>
+    <div>HomePage</div>
+</ExplorerLayout>
