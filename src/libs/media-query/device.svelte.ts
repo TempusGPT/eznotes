@@ -10,14 +10,14 @@ mobileMediaQuery.onchange = (e) => (isMobile = e.matches);
 tabletMediaQuery.onchange = (e) => (isTablet = e.matches);
 desktopMediaQuery.onchange = (e) => (isDesktop = e.matches);
 
-export const responsive = {
-    get isMobile() {
+export const device = {
+    get mobile() {
         return isMobile;
     },
-    get isTablet() {
+    get tablet() {
         return isTablet;
     },
-    get isDesktop() {
+    get desktop() {
         return isDesktop;
     },
 };

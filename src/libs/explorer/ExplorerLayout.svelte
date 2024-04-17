@@ -8,14 +8,14 @@
 </script>
 
 <script lang="ts">
-    import { responsive } from "~/libs/responsive.svelte";
+    import { device } from "~/libs/media-query";
     import Explorer from "./Explorer.svelte";
 
     let { explorerOnMobile = false, children }: ExplorerLayoutProps = $props();
 </script>
 
 <main class="container-fluid">
-    {#if responsive.isMobile}
+    {#if device.mobile}
         {#if explorerOnMobile}
             <Explorer />
         {:else}
