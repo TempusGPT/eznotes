@@ -3,15 +3,14 @@
     import { marked } from "marked";
     import DOMPurify from "dompurify";
 
-    import { NOTES } from "~/libs/mockup";
+    import { NOTES, type Note } from "~/libs/mockup";
     import ExplorerLayout from "~/libs/explorer/ExplorerLayout.svelte";
+    import ErrorPage from "~/pages/ErrorPage.svelte";
 
-    let path = $state("");
-    const note = $derived(
-        NOTES.find((note) => note.path === decodeURI(path.replace("/notes", "")))
-    );
-
-    location.subscribe((value) => (path = value));
+    let note = $state<Note>();
+    location.subscribe((value) => {
+        note = NOTES.find((note) => note.path === decodeURI(value.replace("/notes", "")));
+    });
 </script>
 
 {#if note}
@@ -20,5 +19,5 @@
         {@html DOMPurify.sanitize(marked(note.content) as string)}
     </ExplorerLayout>
 {:else}
-    Not Found
+    <ErrorPage />
 {/if}
