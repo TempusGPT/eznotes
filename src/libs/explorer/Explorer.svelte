@@ -3,8 +3,9 @@
     import { NOTES } from "~/libs/mockup";
 
     const STORAGE_KEY = "explorer-path";
-
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
+    $effect(() => sessionStorage.setItem(STORAGE_KEY, currentPath));
+
     let visiblePaths = $derived([
         ...new Set(
             NOTES.filter(({ path }) => path.startsWith(currentPath)).map(
@@ -17,7 +18,7 @@
         push("/settings");
     };
 
-    const openPath = (path: string) => {
+    const pushPath = (path: string) => {
         const note = NOTES.find((note) => note.path === currentPath + path);
 
         if (note) {
@@ -27,9 +28,11 @@
         }
     };
 
-    $effect(() => {
-        sessionStorage.setItem(STORAGE_KEY, currentPath);
-    });
+    const popPath = () => {
+        const path = currentPath.split("/");
+        path.splice(-2, 1);
+        currentPath = path.join("/");
+    };
 </script>
 
 <div class="explorer">
@@ -38,8 +41,13 @@
     </article>
 
     <article class="notes">
+        {#if currentPath !== "/"}
+            {@const path = currentPath.split("/")}
+            <button onclick={popPath}>{"<"} {path.at(-2)}</button>
+        {/if}
+
         {#each visiblePaths as path}
-            <button onclick={() => openPath(path)}>{path}</button>
+            <button onclick={() => pushPath(path)}>{path}</button>
         {/each}
     </article>
 </div>
