@@ -1,55 +1,42 @@
 <script lang="ts" context="module">
-    const MOCKUP = [
-        { id: 0, path: "/Some Note" },
-        { id: 1, path: "/Other Note" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-        { id: 2, path: "/Folder/Note in Folder" },
-    ] as const;
+    import { NOTES } from "../mockup";
+
+    let currentPath = $state("/");
+    let visiblePaths = $derived([
+        ...new Set(
+            NOTES.filter(({ path }) => path.startsWith(currentPath)).map(
+                ({ path }) => path.replace(currentPath, "").split("/")[0]
+            )
+        ),
+    ]);
 </script>
 
 <script lang="ts">
     import { push } from "svelte-spa-router";
 
-    const handleClick = (id: number) => () => {
-        push(`/notes/${id}`);
+    const openSettings = () => {
+        push("/settings");
+    };
+
+    const openPath = (path: string) => {
+        const note = NOTES.find((note) => note.path === currentPath + path);
+
+        if (note) {
+            push("/notes" + note.path);
+        } else {
+            currentPath += path + "/";
+        }
     };
 </script>
 
 <div class="explorer">
     <article>
-        <button>Settings</button>
-        <button>Trash</button>
+        <button onclick={openSettings}>Settings</button>
     </article>
 
     <article class="notes">
-        {#each MOCKUP as { id, path }}
-            <button onclick={handleClick(id)}>{id}: {path}</button>
+        {#each visiblePaths as path}
+            <button onclick={() => openPath(path)}>{path}</button>
         {/each}
     </article>
 </div>
@@ -66,7 +53,7 @@
         flex-grow: 1;
         overflow: scroll;
     }
-    
+
     button {
         width: 100%;
         padding: 0.25em 0;
