@@ -19,14 +19,14 @@
         {#if explorerOnMobile}
             <Explorer />
         {:else}
-            <article>
+            <article class="editor">
                 {@render children()}
             </article>
         {/if}
     {:else}
         <div class="grid">
             <Explorer />
-            <article>
+            <article class="editor">
                 {@render children()}
             </article>
         </div>
@@ -39,10 +39,11 @@
         --spacing-v: calc(var(--pico-block-spacing-vertical) * 2);
     }
 
-    article {
+    .editor {
         height: calc(100vh - var(--spacing-v));
-        margin: 0;
         padding: var(--spacing-v) var(--spacing-h);
+        margin: 0;
+        overflow: scroll;
     }
 
     .grid {
