@@ -1,7 +1,10 @@
-<script lang="ts" context="module">
-    import { NOTES } from "../mockup";
+<script lang="ts">
+    import { push } from "svelte-spa-router";
+    import { NOTES } from "~/libs/mockup";
 
-    let currentPath = $state("/");
+    const STORAGE_KEY = "explorer-path";
+
+    let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
     let visiblePaths = $derived([
         ...new Set(
             NOTES.filter(({ path }) => path.startsWith(currentPath)).map(
@@ -9,10 +12,6 @@
             )
         ),
     ]);
-</script>
-
-<script lang="ts">
-    import { push } from "svelte-spa-router";
 
     const openSettings = () => {
         push("/settings");
@@ -27,6 +26,10 @@
             currentPath += path + "/";
         }
     };
+
+    $effect(() => {
+        sessionStorage.setItem(STORAGE_KEY, currentPath);
+    });
 </script>
 
 <div class="explorer">
