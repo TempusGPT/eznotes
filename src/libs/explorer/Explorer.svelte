@@ -20,7 +20,7 @@
     {/each}
 </div>
 
-<style lang="scss">
+<style>
     .list {
         width: 100%;
         padding: 0.25em 0;

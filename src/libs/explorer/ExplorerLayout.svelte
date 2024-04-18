@@ -33,12 +33,16 @@
     {/if}
 </main>
 
-<style lang="scss">
+<style>
+    :root {
+        --spacing-h: calc(var(--pico-block-spacing-horizontal) * 2);
+        --spacing-v: calc(var(--pico-block-spacing-vertical) * 2);
+    }
+
     article {
-        height: calc(100vh - var(--pico-block-spacing-vertical) * 2);
+        height: calc(100vh - var(--spacing-v));
         margin: 0;
-        padding: calc(var(--pico-block-spacing-vertical) * 2)
-            calc(var(--pico-block-spacing-horizontal) * 2);
+        padding: var(--spacing-v) var(--spacing-h);
     }
 
     .grid {
