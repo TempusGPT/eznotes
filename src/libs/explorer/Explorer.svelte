@@ -67,9 +67,13 @@
 
     button {
         width: 100%;
-        padding: 0.25em 0;
+        padding: 0.25em;
         border: none;
         background-color: transparent;
         text-align: left;
+    }
+
+    button:focus {
+        box-shadow: none;
     }
 </style>
