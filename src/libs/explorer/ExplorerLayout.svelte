@@ -10,6 +10,7 @@
 <script lang="ts">
     import { device } from "~/libs/media-query";
     import Explorer from "./Explorer.svelte";
+    import Editor from "./Editor.svelte";
 
     let { explorerOnMobile = false, children }: ExplorerLayoutProps = $props();
 </script>
@@ -19,16 +20,12 @@
         {#if explorerOnMobile}
             <Explorer />
         {:else}
-            <article>
-                {@render children()}
-            </article>
+            <Editor></Editor>
         {/if}
     {:else}
         <div class="grid">
             <Explorer />
-            <article>
-                {@render children()}
-            </article>
+            <Editor></Editor>
         </div>
     {/if}
 </main>
@@ -41,12 +38,5 @@
 
     .grid {
         grid-template-columns: 18em 1fr;
-    }
-
-    article {
-        height: calc(100vh - var(--spacing-v));
-        padding: var(--spacing-v) var(--spacing-h);
-        margin: 0;
-        overflow: scroll;
     }
 </style>
