@@ -2,6 +2,4 @@
     import ExplorerLayout from "~/libs/explorer/ExplorerLayout.svelte";
 </script>
 
-<ExplorerLayout>
-    <div>Settings</div>
-</ExplorerLayout>
+<ExplorerLayout />

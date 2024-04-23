@@ -1,9 +1,7 @@
 <script lang="ts" context="module">
-    import type { Snippet } from "svelte";
-
     export type ExplorerLayoutProps = {
+        content?: string;
         explorerOnMobile?: boolean;
-        children: Snippet;
     };
 </script>
 
@@ -12,7 +10,7 @@
     import Explorer from "./Explorer.svelte";
     import Editor from "./Editor.svelte";
 
-    let { explorerOnMobile = false, children }: ExplorerLayoutProps = $props();
+    let { content, explorerOnMobile = false }: ExplorerLayoutProps = $props();
 </script>
 
 <main class="container-fluid">
@@ -20,12 +18,12 @@
         {#if explorerOnMobile}
             <Explorer />
         {:else}
-            <Editor></Editor>
+            <Editor {content} />
         {/if}
     {:else}
         <div class="grid">
             <Explorer />
-            <Editor></Editor>
+            <Editor {content} />
         </div>
     {/if}
 </main>

@@ -4,11 +4,11 @@
     import ExplorerLayout from "~/libs/explorer/ExplorerLayout.svelte";
     import ErrorPage from "~/pages/ErrorPage.svelte";
 
-    let note = $state(notes.find((note) => note.path === location.path.replace("/notes", "")));
+    const note = $derived(notes.find((note) => note.id === location.params.id));
 </script>
 
 {#if note}
-    <ExplorerLayout>asdf</ExplorerLayout>
+    <ExplorerLayout content={note.content} />
 {:else}
     <ErrorPage />
 {/if}

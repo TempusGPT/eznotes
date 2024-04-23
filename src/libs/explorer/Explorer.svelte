@@ -8,9 +8,9 @@
 
     let visiblePaths = $derived([
         ...new Set(
-            notes.filter(({ path }) => path.startsWith(currentPath)).map(
-                ({ path }) => path.replace(currentPath, "").split("/")[0]
-            )
+            notes
+                .filter(({ path }) => path.startsWith(currentPath))
+                .map(({ path }) => path.replace(currentPath, "").split("/")[0])
         ),
     ]);
 
@@ -22,7 +22,7 @@
         const note = notes.find((note) => note.path === currentPath + path);
 
         if (note) {
-            navigate("/notes" + note.path);
+            navigate("/notes/" + note.id);
         } else {
             currentPath += path + "/";
         }
