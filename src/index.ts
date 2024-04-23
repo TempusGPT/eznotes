@@ -1,6 +1,5 @@
 import { mount } from "svelte";
-import Router from "svelte-spa-router";
-import { navigate } from "~/libs/router";
+import { Router, navigate } from "~/libs/router";
 
 import EditorPage from "~/pages/EditorPage.svelte";
 import ErrorPage from "~/pages/ErrorPage.svelte";
