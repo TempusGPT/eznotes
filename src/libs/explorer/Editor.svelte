@@ -1,19 +1,34 @@
 <script lang="ts">
-    import { HeadingNode, QuoteNode, registerRichText } from "@lexical/rich-text";
-    import { createEmptyHistoryState, registerHistory } from "@lexical/history";
-    import { mergeRegister } from "@lexical/utils";
     import { createEditor } from "lexical";
-    import prepopulatedRichText from "./prepopulatedRichText";
+    import { HeadingNode, QuoteNode, registerRichText } from "@lexical/rich-text";
+    import { CodeHighlightNode, CodeNode, registerCodeHighlighting } from "@lexical/code";
+    import { ListNode, ListItemNode } from "@lexical/list";
+    import { LinkNode } from "@lexical/link";
+    import { createEmptyHistoryState, registerHistory } from "@lexical/history";
+    import { TRANSFORMERS, registerMarkdownShortcuts } from "@lexical/markdown";
+    import { mergeRegister } from "@lexical/utils";
 
     let element: HTMLElement;
 
     $effect(() => {
-        const editor = createEditor({ nodes: [HeadingNode, QuoteNode] });
+        const editor = createEditor({
+            nodes: [
+                HeadingNode,
+                QuoteNode,
+                CodeNode,
+                CodeHighlightNode,
+                ListNode,
+                ListItemNode,
+                LinkNode,
+            ],
+        });
+
         editor.setRootElement(element);
-        editor.update(prepopulatedRichText, { tag: "history-merge" });
 
         return mergeRegister(
             registerRichText(editor),
+            registerCodeHighlighting(editor),
+            registerMarkdownShortcuts(editor, TRANSFORMERS),
             registerHistory(editor, createEmptyHistoryState(), 300)
         );
     });
