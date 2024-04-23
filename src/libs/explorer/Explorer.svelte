@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { push } from "svelte-spa-router";
+    import { navigate } from "~/libs/router";
     import { NOTES } from "~/libs/mockup";
 
     const STORAGE_KEY = "explorer-path";
@@ -15,14 +15,14 @@
     ]);
 
     const openSettings = () => {
-        push("/settings");
+        navigate("/settings");
     };
 
     const pushPath = (path: string) => {
         const note = NOTES.find((note) => note.path === currentPath + path);
 
         if (note) {
-            push("/notes" + note.path);
+            navigate("/notes" + note.path);
         } else {
             currentPath += path + "/";
         }

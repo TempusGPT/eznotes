@@ -1,5 +1,6 @@
 import { mount } from "svelte";
-import Router, { replace } from "svelte-spa-router";
+import Router from "svelte-spa-router";
+import { navigate } from "~/libs/router";
 
 import EditorPage from "~/pages/EditorPage.svelte";
 import ErrorPage from "~/pages/ErrorPage.svelte";
@@ -16,7 +17,7 @@ const routes = {
 };
 
 if (!window.location.hash) {
-    replace("/");
+    navigate("/", { replace: true });
 }
 
 mount(Router, {
