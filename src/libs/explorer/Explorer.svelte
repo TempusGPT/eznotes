@@ -1,6 +1,6 @@
 <script lang="ts">
     import { navigate } from "~/libs/router";
-    import { NOTES } from "~/libs/mockup";
+    import { notes } from "~/libs/mockup";
 
     const STORAGE_KEY = "explorer-path";
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
@@ -8,7 +8,7 @@
 
     let visiblePaths = $derived([
         ...new Set(
-            NOTES.filter(({ path }) => path.startsWith(currentPath)).map(
+            notes.filter(({ path }) => path.startsWith(currentPath)).map(
                 ({ path }) => path.replace(currentPath, "").split("/")[0]
             )
         ),
@@ -19,7 +19,7 @@
     };
 
     const pushPath = (path: string) => {
-        const note = NOTES.find((note) => note.path === currentPath + path);
+        const note = notes.find((note) => note.path === currentPath + path);
 
         if (note) {
             navigate("/notes" + note.path);

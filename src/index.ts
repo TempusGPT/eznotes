@@ -10,7 +10,7 @@ import SettingsPage from "~/pages/SettingsPage.svelte";
 
 const routes = {
     "/": HomePage,
-    "/notes/*": EditorPage,
+    "/notes/:id": EditorPage,
     "/settings": SettingsPage,
     "/login": LoginPage,
     "/*": ErrorPage,
