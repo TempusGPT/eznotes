@@ -1,29 +1,21 @@
 <script lang="ts">
-    import { QuoteNode, registerRichText } from "@lexical/rich-text";
-    import { HeadingNode } from "@lexical/rich-text";
+    import { HeadingNode, QuoteNode, registerRichText } from "@lexical/rich-text";
+    import { createEmptyHistoryState, registerHistory } from "@lexical/history";
+    import { mergeRegister } from "@lexical/utils";
     import { createEditor } from "lexical";
     import prepopulatedRichText from "./prepopulatedRichText";
 
     let element: HTMLElement;
 
     $effect(() => {
-        const initialConfig = {
-            namespace: "Vanilla JS Demo",
-            // Register nodes specific for @lexical/rich-text
-            nodes: [HeadingNode, QuoteNode],
-            onError: (error: Error) => {
-                throw error;
-            },
-            theme: {
-                // Adding styling to Quote node, see styles.css
-                quote: "PlaygroundEditorTheme__quote",
-            },
-        };
-
-        const editor = createEditor(initialConfig);
+        const editor = createEditor({ nodes: [HeadingNode, QuoteNode] });
         editor.setRootElement(element);
-        registerRichText(editor);
         editor.update(prepopulatedRichText, { tag: "history-merge" });
+
+        return mergeRegister(
+            registerRichText(editor),
+            registerHistory(editor, createEmptyHistoryState(), 300)
+        );
     });
 </script>
 
