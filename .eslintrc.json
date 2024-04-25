@@ -28,5 +28,9 @@
     "rules": {
         "no-undef": "off"
     },
-    "ignorePatterns": ["svelte.config.js", "vite.config.js"]
+    "ignorePatterns": [
+        "svelte.config.js",
+        "vite.config.js",
+        "prettier.config.js"
+    ]
 }
