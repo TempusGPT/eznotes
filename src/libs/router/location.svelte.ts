@@ -1,5 +1,9 @@
 import { get } from "svelte/store";
-import { location as path, querystring as query, params } from "svelte-spa-router";
+import {
+    location as path,
+    querystring as query,
+    params,
+} from "svelte-spa-router";
 
 const toPath = (value: string): string => {
     return decodeURI(value);

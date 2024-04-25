@@ -36,7 +36,7 @@
             registerRichText(editor),
             registerCodeHighlighting(editor),
             registerMarkdownShortcuts(editor, TRANSFORMERS),
-            registerHistory(editor, createEmptyHistoryState(), 300)
+            registerHistory(editor, createEmptyHistoryState(), 300),
         );
     });
 
