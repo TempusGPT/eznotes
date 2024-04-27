@@ -6,29 +6,21 @@
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
     $effect(() => sessionStorage.setItem(STORAGE_KEY, currentPath));
 
-    let visiblePaths = $derived([
-        ...new Set(
+    let visibleFolders = $derived(
+        new Set(
             notes
-                .filter(({ path }) => path.startsWith(currentPath))
-                .map(({ path }) => path.replace(currentPath, "").split("/")[0])
+                .filter(({ path }) => path !== currentPath && path.startsWith(currentPath))
+                .map(({ path }) => path.replace(currentPath, "").split("/")[0]),
         ),
-    ]);
+    );
 
-    const openSettings = () => {
-        navigate("/settings");
-    };
+    let visibleNotes = $derived(notes.filter(({ path }) => path === currentPath));
 
-    const pushPath = (path: string) => {
-        const note = notes.find((note) => note.path === currentPath + path);
+    const openSettings = () => navigate("/settings");
+    const openFolder = (path: string) => (currentPath += path + "/");
+    const openNote = (id: string) => navigate("/notes/" + id);
 
-        if (note) {
-            navigate("/notes/" + note.id);
-        } else {
-            currentPath += path + "/";
-        }
-    };
-
-    const popPath = () => {
+    const closeFolder = () => {
         const path = currentPath.split("/");
         path.splice(-2, 1);
         currentPath = path.join("/");
@@ -42,12 +34,15 @@
 
     <article class="notes">
         {#if currentPath !== "/"}
-            {@const path = currentPath.split("/")}
-            <button onclick={popPath}>{"<"} {path.at(-2)}</button>
+            <button onclick={closeFolder}>❌ {currentPath.split("/").at(-2)}</button>
         {/if}
 
-        {#each visiblePaths as path}
-            <button onclick={() => pushPath(path)}>{path}</button>
+        {#each visibleFolders as folder}
+            <button onclick={() => openFolder(folder)}>📁 {folder}</button>
+        {/each}
+
+        {#each visibleNotes as note}
+            <button onclick={() => openNote(note.id)}>📝 {note.name}</button>
         {/each}
     </article>
 </div>

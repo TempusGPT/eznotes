@@ -48,7 +48,7 @@
     });
 </script>
 
-<article bind:this={element} contenteditable></article>
+<article bind:this={element} contenteditable />
 
 <style>
     article {
