@@ -6,7 +6,7 @@
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
     $effect(() => sessionStorage.setItem(STORAGE_KEY, currentPath));
 
-    let visibleFolders = $derived(
+    const visibleFolders = $derived(
         new Set(
             notes
                 .filter(({ path }) => path !== currentPath && path.startsWith(currentPath))
@@ -14,7 +14,7 @@
         ),
     );
 
-    let visibleNotes = $derived(notes.filter(({ path }) => path === currentPath));
+    const visibleNotes = $derived(notes.filter(({ path }) => path === currentPath));
 
     const openSettings = () => navigate("/settings");
     const openFolder = (path: string) => (currentPath += path + "/");

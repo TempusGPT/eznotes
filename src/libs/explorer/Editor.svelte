@@ -14,6 +14,9 @@
     import { TRANSFORMERS, registerMarkdownShortcuts } from "@lexical/markdown";
     import { mergeRegister } from "@lexical/utils";
 
+    import { location } from "~/libs/router";
+    import { notes } from "~/libs/mockup";
+
     let { content }: EditorProps = $props();
     let element: HTMLElement;
 
@@ -36,7 +39,7 @@
             registerRichText(editor),
             registerCodeHighlighting(editor),
             registerMarkdownShortcuts(editor, TRANSFORMERS),
-            registerHistory(editor, createEmptyHistoryState(), 300),
+            registerHistory(editor, createEmptyHistoryState(), 1000),
         );
     });
 
@@ -46,9 +49,16 @@
             editor.setEditorState(state);
         }
     });
+
+    const saveNote = () => {
+        const state = JSON.stringify(editor.getEditorState());
+        notes
+            .filter((note) => note.id === location.params.id)
+            .forEach((note) => (note.content = state));
+    };
 </script>
 
-<article bind:this={element} contenteditable />
+<article bind:this={element} onblur={saveNote} contenteditable />
 
 <style>
     article {
