@@ -1,6 +1,6 @@
 <script lang="ts">
     import { navigate } from "~/libs/router";
-    import { notes } from "~/libs/mockup";
+    import { notes, type Note } from "~/libs/mockup";
 
     const STORAGE_KEY = "explorer-path";
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
@@ -25,27 +25,61 @@
         path.splice(-2, 1);
         currentPath = path.join("/");
     };
+
+    let currentModifyingNote = $state<Note | null>(null);
+    const modifyNote = (id: string) =>
+        (currentModifyingNote = notes.find((note) => note.id === id) ?? null);
+    let radioSelection = $state("rename");
 </script>
 
 <div class="explorer">
     <article>
-        <button onclick={openSettings}>Settings</button>
+        <button class="item" onclick={openSettings}>Settings</button>
     </article>
 
     <article class="notes">
         {#if currentPath !== "/"}
-            <button onclick={closeFolder}>❌ {currentPath.split("/").at(-2)}</button>
+            <button class="item" onclick={closeFolder}>❌ {currentPath.split("/").at(-2)}</button>
         {/if}
 
         {#each visibleFolders as folder}
-            <button onclick={() => openFolder(folder)}>📁 {folder}</button>
+            <button class="item" onclick={() => openFolder(folder)}>📁 {folder}</button>
         {/each}
 
         {#each visibleNotes as note}
-            <button onclick={() => openNote(note.id)}>📝 {note.name}</button>
+            <div class="grid">
+                <button class="item" onclick={() => openNote(note.id)}>📝 {note.name}</button>
+                <button class="item" onclick={() => modifyNote(note.id)}>⋮</button>
+            </div>
         {/each}
     </article>
 </div>
+
+{#if currentModifyingNote}
+    <dialog open>
+        <article>
+            <h2>{currentModifyingNote.name}</h2>
+
+            <fieldset>
+                <input id="rename" value="rename" type="radio" bind:group={radioSelection} />
+                <label for="rename">Rename</label>
+
+                <input id="move" value="move" type="radio" bind:group={radioSelection} />
+                <label for="move">Move</label>
+
+                <input id="delete" value="delete" type="radio" bind:group={radioSelection} />
+                <label for="delete">Delete</label>
+            </fieldset>
+
+            <input />
+
+            <footer>
+                <button class="secondary">Cancel</button>
+                <button>Modify</button>
+            </footer>
+        </article>
+    </dialog>
+{/if}
 
 <style>
     .explorer {
@@ -60,7 +94,7 @@
         overflow: scroll;
     }
 
-    button {
+    .item {
         width: 100%;
         padding: 0.25em;
         border: none;
@@ -68,7 +102,7 @@
         text-align: left;
     }
 
-    button:focus {
+    .item:focus {
         box-shadow: none;
     }
 </style>
