@@ -58,7 +58,10 @@
         if (radioSelection === "rename") {
             currentModifyingNote.name = inputValue;
         } else if (radioSelection === "move") {
-            currentModifyingNote.path = inputValue;
+            let path = inputValue;
+            path = path.startsWith("/") ? path : "/" + path;
+            path = path.endsWith("/") ? path : path + "/";
+            currentModifyingNote.path = path;
         } else if (radioSelection === "delete") {
             notes.splice(notes.indexOf(currentModifyingNote), 1);
         }
