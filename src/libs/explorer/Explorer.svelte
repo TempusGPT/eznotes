@@ -1,10 +1,12 @@
 <script lang="ts">
     import { navigate } from "~/libs/router";
-    import { notes, type Note } from "~/libs/mockup";
+    import { notes as notesOrigin, type Note } from "~/libs/mockup";
 
     const STORAGE_KEY = "explorer-path";
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
     $effect(() => sessionStorage.setItem(STORAGE_KEY, currentPath));
+
+    let notes = $state(notesOrigin);
 
     const visibleFolders = $derived(
         new Set(
@@ -47,6 +49,22 @@
 
     const modifyNote = (note: Note) => (currentModifyingNote = note);
     const handleCancel = () => (currentModifyingNote = null);
+
+    const handleModify = () => {
+        if (!currentModifyingNote) {
+            return;
+        }
+
+        if (radioSelection === "rename") {
+            currentModifyingNote.name = inputValue;
+        } else if (radioSelection === "move") {
+            currentModifyingNote.path = inputValue;
+        } else if (radioSelection === "delete") {
+            notes.splice(notes.indexOf(currentModifyingNote), 1);
+        }
+
+        currentModifyingNote = null;
+    };
 </script>
 
 <div class="explorer">
@@ -90,7 +108,7 @@
 
             <footer>
                 <button class="secondary" onclick={handleCancel}>Cancel</button>
-                <button>Modify</button>
+                <button onclick={handleModify}>Modify</button>
             </footer>
         </article>
     </dialog>
