@@ -27,9 +27,26 @@
     };
 
     let currentModifyingNote = $state<Note | null>(null);
-    const modifyNote = (id: string) =>
-        (currentModifyingNote = notes.find((note) => note.id === id) ?? null);
     let radioSelection = $state("rename");
+    let inputValue = $state("");
+    const inputDisabled = $derived(radioSelection === "delete");
+
+    $effect(() => {
+        if (!currentModifyingNote) {
+            return;
+        }
+
+        if (radioSelection === "rename") {
+            inputValue = currentModifyingNote.name;
+        } else if (radioSelection === "move") {
+            inputValue = currentModifyingNote.path;
+        } else if (radioSelection === "delete") {
+            inputValue = "";
+        }
+    });
+
+    const modifyNote = (note: Note) => (currentModifyingNote = note);
+    const handleCancel = () => (currentModifyingNote = null);
 </script>
 
 <div class="explorer">
@@ -49,7 +66,7 @@
         {#each visibleNotes as note}
             <div class="grid">
                 <button class="item" onclick={() => openNote(note.id)}>📝 {note.name}</button>
-                <button class="item" onclick={() => modifyNote(note.id)}>⋮</button>
+                <button class="item" onclick={() => modifyNote(note)}>⋮</button>
             </div>
         {/each}
     </article>
@@ -59,7 +76,6 @@
     <dialog open>
         <article>
             <h2>{currentModifyingNote.name}</h2>
-
             <fieldset>
                 <input id="rename" value="rename" type="radio" bind:group={radioSelection} />
                 <label for="rename">Rename</label>
@@ -70,11 +86,10 @@
                 <input id="delete" value="delete" type="radio" bind:group={radioSelection} />
                 <label for="delete">Delete</label>
             </fieldset>
-
-            <input />
+            <input disabled={inputDisabled} bind:value={inputValue} />
 
             <footer>
-                <button class="secondary">Cancel</button>
+                <button class="secondary" onclick={handleCancel}>Cancel</button>
                 <button>Modify</button>
             </footer>
         </article>
@@ -104,5 +119,9 @@
 
     .item:focus {
         box-shadow: none;
+    }
+
+    .grid {
+        grid-template-columns: 1fr auto;
     }
 </style>
