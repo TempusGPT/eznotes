@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
     const STORAGE_KEY = "explorer-path";
+    const EN_SPACE = " ";
 </script>
 
 <script lang="ts">
@@ -36,18 +37,18 @@
 
     {#if searchQuery === ""}
         {#if currentFolder}
-            <button class="item" onclick={closeFolder}>❌ {currentFolder}</button>
+            <button class="item" onclick={closeFolder}>❌{EN_SPACE}{currentFolder}</button>
         {/if}
 
         {#each visibleFolders as folder}
-            <button class="item" onclick={() => openFolder(folder)}>📁 {folder}</button>
+            <button class="item" onclick={() => openFolder(folder)}>📁{EN_SPACE}{folder}</button>
         {/each}
 
         {#each visibleNotes as note}
             {@render noteItem(note)}
         {/each}
 
-        <button class="item" onclick={() => createModal.open()}>✅ New Note</button>
+        <button class="item" onclick={() => createModal.open()}>✅{EN_SPACE}New Note</button>
     {:else}
         {#each searchResult as note}
             {@render noteItem(note)}
@@ -60,7 +61,9 @@
 
 {#snippet noteItem(note: Note)}
     <div class="grid">
-        <button class="item" onclick={() => navigate("/notes/" + note.id)}>📝 {note.name}</button>
+        <button class="item" onclick={() => navigate("/notes/" + note.id)}>
+            📝{EN_SPACE}{note.name}
+        </button>
         <button class="item" onclick={() => menuModal.open(note)}>⋮</button>
     </div>
 {/snippet}
