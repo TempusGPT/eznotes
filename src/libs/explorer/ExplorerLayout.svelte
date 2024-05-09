@@ -32,6 +32,7 @@
     :root {
         --spacing-h: calc(var(--pico-block-spacing-horizontal) * 2);
         --spacing-v: calc(var(--pico-block-spacing-vertical) * 2);
+        --height: calc(100vh - var(--spacing-v));
     }
 
     .grid {

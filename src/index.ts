@@ -5,12 +5,10 @@ import EditorPage from "~/pages/EditorPage.svelte";
 import ErrorPage from "~/pages/ErrorPage.svelte";
 import HomePage from "~/pages/HomePage.svelte";
 import LoginPage from "~/pages/LoginPage.svelte";
-import SettingsPage from "~/pages/SettingsPage.svelte";
 
 const routes = {
     "/": HomePage,
     "/notes/:id": EditorPage,
-    "/settings": SettingsPage,
     "/login": LoginPage,
     "/*": ErrorPage,
 };

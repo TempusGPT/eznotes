@@ -38,7 +38,7 @@
         <article>
             <h2>New Note</h2>
             <label>
-                <div>Note name</div>
+                <div>Name</div>
                 <input placeholder={PLACEHOLDER} bind:value={inputValue} />
             </label>
 

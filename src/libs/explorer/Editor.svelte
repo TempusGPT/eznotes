@@ -62,7 +62,7 @@
 
 <style>
     article {
-        height: calc(100vh - var(--spacing-v));
+        height: var(--height);
         padding: var(--spacing-v) var(--spacing-h);
         margin: 0;
         overflow: scroll;

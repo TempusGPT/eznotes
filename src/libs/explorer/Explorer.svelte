@@ -44,34 +44,29 @@
     let newNoteModal: NewNoteModal;
 </script>
 
-<div class="explorer">
-    <article>
-        <button class="item" onclick={() => newNoteModal.open()}>New Note</button>
-        <button class="item" onclick={() => navigate("/settings")}>Settings</button>
-    </article>
+<article class="notes">
+    <input type="search" placeholder="Search" bind:value={searchQuery} />
 
-    <article class="notes">
-        <input type="search" placeholder="Search" bind:value={searchQuery} />
-
-        {#if searchQuery === ""}
-            {#if currentFolder}
-                <button class="item" onclick={closeFolder}>❌ {currentFolder}</button>
-            {/if}
-
-            {#each visibleFolders as folder}
-                <button class="item" onclick={() => openFolder(folder)}>📁 {folder}</button>
-            {/each}
-
-            {#each visibleNotes as note}
-                {@render noteItem(note)}
-            {/each}
-        {:else}
-            {#each searchResult as note}
-                {@render noteItem(note)}
-            {/each}
+    {#if searchQuery === ""}
+        {#if currentFolder}
+            <button class="item" onclick={closeFolder}>❌ {currentFolder}</button>
         {/if}
-    </article>
-</div>
+
+        {#each visibleFolders as folder}
+            <button class="item" onclick={() => openFolder(folder)}>📁 {folder}</button>
+        {/each}
+
+        {#each visibleNotes as note}
+            {@render noteItem(note)}
+        {/each}
+
+        <button class="item" onclick={() => newNoteModal.open()}>✅ New Note</button>
+    {:else}
+        {#each searchResult as note}
+            {@render noteItem(note)}
+        {/each}
+    {/if}
+</article>
 
 <NoteMenuModal {notes} bind:this={noteMenuModal} />
 <NewNoteModal {notes} path={currentPath} bind:this={newNoteModal} />
@@ -84,15 +79,9 @@
 {/snippet}
 
 <style>
-    .explorer {
-        height: calc(100vh - var(--pico-block-spacing-horizontal) * 2);
-        display: flex;
-        flex-direction: column;
-    }
-
     .notes {
+        height: var(--height);
         margin: 0;
-        flex-grow: 1;
         overflow: scroll;
     }
 
