@@ -1,13 +1,8 @@
 <script lang="ts">
     import ExplorerLayout from "~/libs/explorer/ExplorerLayout.svelte";
-    import { EMPTY_CONTENT, type Note } from "~/libs/mockup.svelte";
+    import { emptyNote } from "~/libs/server/notes.svelte";
 
-    const welcome: Note = {
-        id: "",
-        path: "",
-        name: "",
-        content: EMPTY_CONTENT,
-    };
+    const welcome = emptyNote();
 </script>
 
 <ExplorerLayout note={welcome} explorerOnMobile />

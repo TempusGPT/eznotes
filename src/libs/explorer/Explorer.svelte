@@ -4,25 +4,16 @@
 
 <script lang="ts">
     import { navigate } from "~/libs/router";
-    import { notes, type Note } from "~/libs/mockup.svelte";
+    import { foldersOf, notesOf, searchNotes, type Note } from "~/libs/server/notes.svelte";
     import NoteMenuModal from "./NoteMenuModal.svelte";
     import NewNoteModal from "./NewNoteModal.svelte";
 
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
+    $effect(() => sessionStorage.setItem(STORAGE_KEY, currentPath));
+
     const currentFolder = $derived(currentPath.split("/").at(-2));
-
-    $effect(() => {
-        sessionStorage.setItem(STORAGE_KEY, currentPath);
-    });
-
-    const visibleFolders = $derived(
-        new Set(
-            notes
-                .filter(({ path }) => path !== currentPath && path.startsWith(currentPath))
-                .map(({ path }) => path.replace(currentPath, "").split("/")[0]),
-        ),
-    );
-    const visibleNotes = $derived(notes.filter(({ path }) => path === currentPath));
+    const visibleFolders = $derived(foldersOf(currentPath));
+    const visibleNotes = $derived(notesOf(currentPath));
 
     const openFolder = (folder: string) => {
         currentPath += folder + "/";
@@ -35,10 +26,7 @@
     };
 
     let searchQuery = $state("");
-    let searchResult = $derived(
-        notes.filter((note) => note.name.toLowerCase().includes(searchQuery.toLowerCase())),
-    );
-
+    let searchResult = $derived(searchNotes(searchQuery));
     let noteMenuModal: NoteMenuModal;
     let newNoteModal: NewNoteModal;
 </script>
@@ -67,8 +55,8 @@
     {/if}
 </article>
 
-<NoteMenuModal {notes} bind:this={noteMenuModal} />
-<NewNoteModal {notes} path={currentPath} bind:this={newNoteModal} />
+<NoteMenuModal bind:this={noteMenuModal} />
+<NewNoteModal path={currentPath} bind:this={newNoteModal} />
 
 {#snippet noteItem(note: Note)}
     <div class="grid">

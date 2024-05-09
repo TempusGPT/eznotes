@@ -1,11 +1,14 @@
 <script lang="ts">
-    import { notes } from "~/libs/mockup.svelte";
+    import { emptyNote, findNote } from "~/libs/server/notes.svelte";
     import { location } from "~/libs/router";
     import ExplorerLayout from "~/libs/explorer/ExplorerLayout.svelte";
 
-    const note = $derived(notes.find((note) => note.id === location.params.id));
+    const note = $derived(findNote(location.params.id));
+    const notFound = emptyNote();
 </script>
 
 {#if note}
     <ExplorerLayout {note} editable />
+{:else}
+    <ExplorerLayout note={notFound} />
 {/if}

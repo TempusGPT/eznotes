@@ -1,13 +1,6 @@
-<script lang="ts" context="module">
-    export type NoteMenuModalProps = {
-        notes: Note[];
-    };
-</script>
-
 <script lang="ts">
-    import type { Note } from "~/libs/mockup.svelte";
+    import { deleteNote, moveNote, renameNote, type Note } from "~/libs/server/notes.svelte";
 
-    let { notes }: NoteMenuModalProps = $props();
     let current = $state<Note>();
     let selection = $state("rename");
     let inputValue = $state("");
@@ -32,14 +25,11 @@
         }
 
         if (selection === "rename") {
-            current.name = inputValue;
+            renameNote(current.id, inputValue);
         } else if (selection === "move") {
-            let path = inputValue;
-            path = path.startsWith("/") ? path : "/" + path;
-            path = path.endsWith("/") ? path : path + "/";
-            current.path = path;
+            moveNote(current.id, inputValue);
         } else if (selection === "delete") {
-            notes.splice(notes.indexOf(current), 1);
+            deleteNote(current.id);
         }
 
         current = undefined;

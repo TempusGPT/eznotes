@@ -1,6 +1,5 @@
 <script lang="ts" context="module">
     export type NewNoteModalProps = {
-        notes: Note[];
         path: string;
     };
 
@@ -8,17 +7,16 @@
 </script>
 
 <script lang="ts">
-    import { EMPTY_CONTENT, type Note } from "~/libs/mockup.svelte";
     import { navigate } from "~/libs/router";
+    import { createNote } from "~/libs/server/notes.svelte";
 
-    let { notes, path }: NewNoteModalProps = $props();
+    let { path }: NewNoteModalProps = $props();
     let isOpened = $state(false);
     let inputValue = $state("");
 
     const create = () => {
-        const id = window.crypto.randomUUID();
         const name = inputValue === "" ? PLACEHOLDER : inputValue;
-        notes.push({ id, name, path, content: EMPTY_CONTENT });
+        const id = createNote(name, path);
         isOpened = false;
         navigate("/notes/" + id);
     };

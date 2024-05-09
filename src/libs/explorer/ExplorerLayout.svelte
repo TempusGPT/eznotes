@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import type { Note } from "~/libs/mockup.svelte";
+    import type { Note } from "~/libs/server/notes.svelte";
 
     export type ExplorerLayoutProps = {
         note: Note;

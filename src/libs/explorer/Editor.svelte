@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { type Note } from "~/libs/mockup.svelte";
+    import { editNote, type Note } from "~/libs/server/notes.svelte";
 
     export type EditorProps = {
         note: Note;
@@ -50,7 +50,7 @@
 
     const saveNote = () => {
         const state = JSON.stringify(editor.getEditorState());
-        note.content = state;
+        editNote(note.id, state);
     };
 </script>
 
