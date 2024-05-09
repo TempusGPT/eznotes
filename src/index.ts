@@ -1,16 +1,16 @@
 import { mount } from "svelte";
 import { Router, navigate } from "~/libs/router";
 
-import NotePage from "~/pages/NotePage.svelte";
-import ErrorPage from "~/pages/ErrorPage.svelte";
 import HomePage from "~/pages/HomePage.svelte";
-import LoginPage from "~/pages/LoginPage.svelte";
+import NotePage from "~/pages/NotePage.svelte";
+import SignInPage from "~/pages/SignInPage.svelte";
+import NotFoundPage from "~/pages/NotFoundPage.svelte";
 
 const routes = {
     "/": HomePage,
     "/notes/:id": NotePage,
-    "/login": LoginPage,
-    "/*": ErrorPage,
+    "/signin": SignInPage,
+    "/*": NotFoundPage,
 };
 
 if (!window.location.hash) {
