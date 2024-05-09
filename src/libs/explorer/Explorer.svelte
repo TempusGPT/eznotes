@@ -114,7 +114,10 @@
 
 {#if newNoteModal}
     <Modal title="New Note" onCancel={() => (newNoteModal = false)} onSubmit={newNote}>
-        <input placeholder={INPUT_PLACEHOLDER} bind:value={inputValue} />
+        <label>
+            <div>Note name:</div>
+            <input placeholder={INPUT_PLACEHOLDER} bind:value={inputValue} />
+        </label>
     </Modal>
 {/if}
 
