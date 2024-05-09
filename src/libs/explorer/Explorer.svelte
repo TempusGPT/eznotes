@@ -86,6 +86,18 @@
         newNoteModal = false;
         navigate("/notes/" + id);
     };
+
+    let searchQuery = $state("");
+    let searchResult = $state<Note[]>([]);
+
+    $effect(() => {
+        if (searchQuery === "") {
+            return;
+        }
+
+        const query = searchQuery.toLowerCase();
+        searchResult = notes.filter(({ name }) => name.toLowerCase().includes(query));
+    });
 </script>
 
 <div class="explorer">
@@ -95,27 +107,40 @@
     </article>
 
     <article class="notes">
-        {#if currentPath !== "/"}
-            <button class="item" onclick={closeFolder}>❌ {currentPath.split("/").at(-2)}</button>
+        <input type="search" placeholder="Search" bind:value={searchQuery} />
+
+        {#if searchQuery === ""}
+            {#if currentPath !== "/"}
+                <button class="item" onclick={closeFolder}>
+                    ❌ {currentPath.split("/").at(-2)}
+                </button>
+            {/if}
+
+            {#each visibleFolders as folder}
+                <button class="item" onclick={() => openFolder(folder)}>📁 {folder}</button>
+            {/each}
+
+            {#each visibleNotes as note}
+                <div class="grid">
+                    <button class="item" onclick={() => openNote(note.id)}>📝 {note.name}</button>
+                    <button class="item" onclick={() => modifyNote(note)}>⋮</button>
+                </div>
+            {/each}
+        {:else}
+            {#each searchResult as note}
+                <div class="grid">
+                    <button class="item" onclick={() => openNote(note.id)}>📝 {note.name}</button>
+                    <button class="item" onclick={() => modifyNote(note)}>⋮</button>
+                </div>
+            {/each}
         {/if}
-
-        {#each visibleFolders as folder}
-            <button class="item" onclick={() => openFolder(folder)}>📁 {folder}</button>
-        {/each}
-
-        {#each visibleNotes as note}
-            <div class="grid">
-                <button class="item" onclick={() => openNote(note.id)}>📝 {note.name}</button>
-                <button class="item" onclick={() => modifyNote(note)}>⋮</button>
-            </div>
-        {/each}
     </article>
 </div>
 
 {#if newNoteModal}
     <Modal title="New Note" onCancel={() => (newNoteModal = false)} onSubmit={newNote}>
         <label>
-            <div>Note name:</div>
+            <div>Note name</div>
             <input placeholder={INPUT_PLACEHOLDER} bind:value={inputValue} />
         </label>
     </Modal>
@@ -164,5 +189,6 @@
 
     .grid {
         grid-template-columns: 1fr auto;
+        gap: 0;
     }
 </style>
