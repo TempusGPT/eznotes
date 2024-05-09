@@ -78,9 +78,6 @@
         border: none;
         background-color: transparent;
         text-align: left;
-    }
-
-    .item:focus {
         box-shadow: none;
     }
 

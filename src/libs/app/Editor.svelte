@@ -54,17 +54,23 @@
     };
 </script>
 
-<article bind:this={element} onblur={saveNote} contenteditable={editable} />
+<article>
+    <h1>{note.name}</h1>
+    <div bind:this={element} onblur={saveNote} contenteditable={editable} />
+</article>
 
 <style>
     article {
-        height: var(--height);
+        display: flex;
+        flex-direction: column;
         padding: var(--spacing-v) var(--spacing-h);
+        height: var(--height);
         margin: 0;
         overflow: scroll;
     }
 
-    article:focus {
+    div {
+        flex: 1;
         outline: none;
     }
 </style>
