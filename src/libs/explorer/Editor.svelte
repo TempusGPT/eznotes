@@ -51,7 +51,6 @@
     const saveNote = () => {
         const state = JSON.stringify(editor.getEditorState());
         note.content = state;
-        note.lastEdit = Date.now();
     };
 </script>
 

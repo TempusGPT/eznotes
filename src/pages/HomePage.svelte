@@ -7,7 +7,6 @@
         path: "",
         name: "",
         content: EMPTY_CONTENT,
-        lastEdit: 0,
     };
 </script>
 

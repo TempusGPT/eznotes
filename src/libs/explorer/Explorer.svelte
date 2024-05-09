@@ -22,12 +22,7 @@
                 .map(({ path }) => path.replace(currentPath, "").split("/")[0]),
         ),
     );
-
-    const visibleNotes = $derived(
-        notes
-            .filter(({ path }) => path === currentPath)
-            .toSorted((lhs, rhs) => rhs.lastEdit - lhs.lastEdit),
-    );
+    const visibleNotes = $derived(notes.filter(({ path }) => path === currentPath));
 
     const openFolder = (folder: string) => {
         currentPath += folder + "/";

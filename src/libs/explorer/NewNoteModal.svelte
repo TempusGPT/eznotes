@@ -18,7 +18,7 @@
     const create = () => {
         const id = window.crypto.randomUUID();
         const name = inputValue === "" ? PLACEHOLDER : inputValue;
-        notes.push({ id, name, path, content: EMPTY_CONTENT, lastEdit: Date.now() });
+        notes.push({ id, name, path, content: EMPTY_CONTENT });
         isOpened = false;
         navigate("/notes/" + id);
     };
