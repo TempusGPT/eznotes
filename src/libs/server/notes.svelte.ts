@@ -12,9 +12,7 @@ const EMPTY_CONTENT =
 
 let notes = $state<Note[]>(JSON.parse(localStorage.getItem("notes") ?? "[]"));
 
-export const emptyNote = (): Note => {
-    return { id: "", path: "", name: "", content: EMPTY_CONTENT };
-};
+export const EMPTY_NOTE = { id: "", path: "", name: "", content: EMPTY_CONTENT } as const;
 
 export const findNote = (id: string) => {
     return notes.find((note) => note.id === id);

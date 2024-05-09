@@ -5,8 +5,8 @@
 <script lang="ts">
     import { navigate } from "~/libs/router";
     import { foldersOf, notesOf, searchNotes, type Note } from "~/libs/server/notes.svelte";
-    import NoteMenuModal from "./NoteMenuModal.svelte";
-    import NewNoteModal from "./NewNoteModal.svelte";
+    import MenuModal from "./MenuModal.svelte";
+    import CreateModal from "./CreateModal.svelte";
 
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
     $effect(() => sessionStorage.setItem(STORAGE_KEY, currentPath));
@@ -27,8 +27,8 @@
 
     let searchQuery = $state("");
     let searchResult = $derived(searchNotes(searchQuery));
-    let noteMenuModal: NoteMenuModal;
-    let newNoteModal: NewNoteModal;
+    let menuModal: MenuModal;
+    let createModal: CreateModal;
 </script>
 
 <article class="explorer">
@@ -47,7 +47,7 @@
             {@render noteItem(note)}
         {/each}
 
-        <button class="item" onclick={() => newNoteModal.open()}>✅ New Note</button>
+        <button class="item" onclick={() => createModal.open()}>✅ New Note</button>
     {:else}
         {#each searchResult as note}
             {@render noteItem(note)}
@@ -55,13 +55,13 @@
     {/if}
 </article>
 
-<NoteMenuModal bind:this={noteMenuModal} />
-<NewNoteModal path={currentPath} bind:this={newNoteModal} />
+<MenuModal bind:this={menuModal} />
+<CreateModal path={currentPath} bind:this={createModal} />
 
 {#snippet noteItem(note: Note)}
     <div class="grid">
         <button class="item" onclick={() => navigate("/notes/" + note.id)}>📝 {note.name}</button>
-        <button class="item" onclick={() => noteMenuModal.open(note)}>⋮</button>
+        <button class="item" onclick={() => menuModal.open(note)}>⋮</button>
     </div>
 {/snippet}
 

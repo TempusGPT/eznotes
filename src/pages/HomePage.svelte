@@ -1,8 +1,5 @@
 <script lang="ts">
-    import AppLayout from "~/libs/app/AppLayout.svelte";
-    import { emptyNote } from "~/libs/server/notes.svelte";
-
-    const welcome = emptyNote();
+    import NoteLayout from "~/libs/note/NoteLayout.svelte";
 </script>
 
-<AppLayout note={welcome} explorerOnMobile />
+<NoteLayout explorerOnMobile />

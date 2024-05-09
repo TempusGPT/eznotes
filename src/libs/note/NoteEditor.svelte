@@ -3,7 +3,7 @@
 
     export type EditorProps = {
         note: Note;
-        editable: boolean;
+        readonly?: boolean;
     };
 </script>
 
@@ -17,7 +17,7 @@
     import { TRANSFORMERS, registerMarkdownShortcuts } from "@lexical/markdown";
     import { mergeRegister } from "@lexical/utils";
 
-    let { note, editable }: EditorProps = $props();
+    let { note, readonly = false }: EditorProps = $props();
     let element: HTMLElement;
 
     const editor = createEditor({
@@ -56,7 +56,7 @@
 
 <article>
     <h1>{note.name}</h1>
-    <div bind:this={element} onblur={saveNote} contenteditable={editable} />
+    <div bind:this={element} onblur={saveNote} contenteditable={!readonly} />
 </article>
 
 <style>

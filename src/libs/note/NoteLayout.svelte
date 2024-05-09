@@ -1,32 +1,37 @@
 <script lang="ts" context="module">
-    import type { Note } from "~/libs/server/notes.svelte";
+    import { EMPTY_NOTE, type Note } from "~/libs/server/notes.svelte";
 
     export type ExplorerLayoutProps = {
-        note: Note;
-        editable?: boolean;
+        note?: Note;
         explorerOnMobile?: boolean;
     };
 </script>
 
 <script lang="ts">
     import { device } from "~/libs/media-query";
-    import Explorer from "./Explorer.svelte";
-    import Editor from "./Editor.svelte";
+    import Explorer from "./NoteExplorer.svelte";
+    import Editor from "./NoteEditor.svelte";
 
-    let { note, editable = false, explorerOnMobile = false }: ExplorerLayoutProps = $props();
+    let { note, explorerOnMobile = false }: ExplorerLayoutProps = $props();
 </script>
 
 <main class="container-fluid">
     {#if device.mobile}
         {#if explorerOnMobile}
             <Explorer />
+        {:else if note}
+            <Editor {note} />
         {:else}
-            <Editor {note} {editable} />
+            <Editor note={EMPTY_NOTE} readonly />
         {/if}
     {:else}
         <div class="grid">
             <Explorer />
-            <Editor {note} {editable} />
+            {#if note}
+                <Editor {note} />
+            {:else}
+                <Editor note={EMPTY_NOTE} readonly />
+            {/if}
         </div>
     {/if}
 </main>
