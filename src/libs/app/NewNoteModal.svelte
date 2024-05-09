@@ -16,7 +16,7 @@
 
     const create = () => {
         const name = inputValue === "" ? PLACEHOLDER : inputValue;
-        const id = createNote(name, path);
+        const id = createNote(path, name);
         isOpened = false;
         navigate("/notes/" + id);
     };

@@ -1,14 +1,14 @@
 <script lang="ts">
     import { emptyNote, findNote } from "~/libs/server/notes.svelte";
     import { location } from "~/libs/router";
-    import ExplorerLayout from "~/libs/explorer/ExplorerLayout.svelte";
+    import AppLayout from "~/libs/app/AppLayout.svelte";
 
     const note = $derived(findNote(location.params.id));
     const notFound = emptyNote();
 </script>
 
 {#if note}
-    <ExplorerLayout {note} editable />
+    <AppLayout {note} editable />
 {:else}
-    <ExplorerLayout note={notFound} />
+    <AppLayout note={notFound} />
 {/if}

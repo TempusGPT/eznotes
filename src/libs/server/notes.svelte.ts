@@ -36,7 +36,7 @@ export const foldersOf = (path: string): Set<string> => {
     );
 };
 
-export const createNote = (name: string, path: string) => {
+export const createNote = (path: string, name: string) => {
     const id = window.crypto.randomUUID();
     notes.push({ id, path, name, content: EMPTY_CONTENT });
     localStorage.setItem("notes", JSON.stringify(notes));
