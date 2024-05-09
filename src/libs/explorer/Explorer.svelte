@@ -1,14 +1,20 @@
+<script lang="ts" context="module">
+    const STORAGE_KEY = "explorer-path";
+</script>
+
 <script lang="ts">
     import { navigate } from "~/libs/router";
-    import { notes as notesOrigin } from "~/libs/mockup";
+    import { notes as notesOrigin, type Note } from "~/libs/mockup";
     import NoteMenuModal from "./NoteMenuModal.svelte";
     import NewNoteModal from "./NewNoteModal.svelte";
 
-    const STORAGE_KEY = "explorer-path";
-    let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
-    $effect(() => sessionStorage.setItem(STORAGE_KEY, currentPath));
-
     let notes = $state(notesOrigin);
+    let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
+    const currentFolder = $derived(currentPath.split("/").at(-2));
+
+    $effect(() => {
+        sessionStorage.setItem(STORAGE_KEY, currentPath);
+    });
 
     const visibleFolders = $derived(
         new Set(
@@ -17,12 +23,7 @@
                 .map(({ path }) => path.replace(currentPath, "").split("/")[0]),
         ),
     );
-
     const visibleNotes = $derived(notes.filter(({ path }) => path === currentPath));
-
-    const openSettings = () => navigate("/settings");
-    const openFolder = (path: string) => (currentPath += path + "/");
-    const openNote = (id: string) => navigate("/notes/" + id);
 
     const closeFolder = () => {
         const path = currentPath.split("/");
@@ -30,47 +31,39 @@
         currentPath = path.join("/");
     };
 
-    let noteMenuModal: NoteMenuModal;
-    let newNoteModal: NewNoteModal;
-
     let searchQuery = $state("");
     let searchResult = $derived(
         notes.filter((note) => note.name.toLowerCase().includes(searchQuery.toLowerCase())),
     );
+
+    let noteMenuModal: NoteMenuModal;
+    let newNoteModal: NewNoteModal;
 </script>
 
 <div class="explorer">
     <article>
         <button class="item" onclick={() => newNoteModal.open()}>New Note</button>
-        <button class="item" onclick={openSettings}>Settings</button>
+        <button class="item" onclick={() => navigate("/settings")}>Settings</button>
     </article>
 
     <article class="notes">
         <input type="search" placeholder="Search" bind:value={searchQuery} />
 
         {#if searchQuery === ""}
-            {#if currentPath !== "/"}
-                <button class="item" onclick={closeFolder}>
-                    ❌ {currentPath.split("/").at(-2)}
-                </button>
+            {#if currentFolder}
+                {@render folderItem("❌", currentFolder, closeFolder)}
             {/if}
 
             {#each visibleFolders as folder}
-                <button class="item" onclick={() => openFolder(folder)}>📁 {folder}</button>
+                {@render folderItem("📁", folder, () => (currentPath += folder + "/"))}
             {/each}
 
             {#each visibleNotes as note}
-                <div class="grid">
-                    <button class="item" onclick={() => openNote(note.id)}>📝 {note.name}</button>
-                    <button class="item" onclick={() => noteMenuModal.open(note)}>⋮</button>
-                </div>
+                {@render noteItem(note)}
             {/each}
         {:else}
             {#each searchResult as note}
-                <div class="grid">
-                    <button class="item" onclick={() => openNote(note.id)}>📝 {note.name}</button>
-                    <button class="item" onclick={() => noteMenuModal.open(note)}>⋮</button>
-                </div>
+                {@render noteItem(note)}
             {/each}
         {/if}
     </article>
@@ -78,6 +71,17 @@
 
 <NoteMenuModal {notes} bind:this={noteMenuModal} />
 <NewNoteModal {notes} path={currentPath} bind:this={newNoteModal} />
+
+{#snippet folderItem(emoji: string, name: string, onClick: () => void)}
+    <button class="item" onclick={onClick}>{emoji} {name}</button>
+{/snippet}
+
+{#snippet noteItem(note: Note)}
+    <div class="grid">
+        <button class="item" onclick={() => navigate("/notes/" + note.id)}>📝 {note.name}</button>
+        <button class="item" onclick={() => noteMenuModal.open(note)}>⋮</button>
+    </div>
+{/snippet}
 
 <style>
     .explorer {
