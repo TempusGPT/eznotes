@@ -23,7 +23,12 @@
                 .map(({ path }) => path.replace(currentPath, "").split("/")[0]),
         ),
     );
-    const visibleNotes = $derived(notes.filter(({ path }) => path === currentPath));
+
+    const visibleNotes = $derived(
+        notes
+            .filter(({ path }) => path === currentPath)
+            .toSorted((lhs, rhs) => rhs.lastEdit - lhs.lastEdit),
+    );
 
     const openFolder = (folder: string) => {
         currentPath += folder + "/";
@@ -44,7 +49,7 @@
     let newNoteModal: NewNoteModal;
 </script>
 
-<article class="notes">
+<article class="explorer">
     <input type="search" placeholder="Search" bind:value={searchQuery} />
 
     {#if searchQuery === ""}
@@ -79,7 +84,7 @@
 {/snippet}
 
 <style>
-    .notes {
+    .explorer {
         height: var(--height);
         margin: 0;
         overflow: scroll;
