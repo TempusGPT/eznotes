@@ -1,7 +1,8 @@
 <script lang="ts">
     import { navigate } from "~/libs/router";
-    import { EMPTY_CONTENT, notes as notesOrigin, type Note } from "~/libs/mockup";
-    import Modal from "./Modal.svelte";
+    import { notes as notesOrigin } from "~/libs/mockup";
+    import NoteMenuModal from "./NoteMenuModal.svelte";
+    import NewNoteModal from "./NewNoteModal.svelte";
 
     const STORAGE_KEY = "explorer-path";
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
@@ -29,63 +30,8 @@
         currentPath = path.join("/");
     };
 
-    let currentModifyingNote = $state<Note | null>(null);
-    let radioSelection = $state("rename");
-    let inputValue = $state("");
-    const inputDisabled = $derived(radioSelection === "delete");
-
-    $effect(() => {
-        if (!currentModifyingNote) {
-            return;
-        }
-
-        if (radioSelection === "rename") {
-            inputValue = currentModifyingNote.name;
-        } else if (radioSelection === "move") {
-            inputValue = currentModifyingNote.path;
-        } else if (radioSelection === "delete") {
-            inputValue = "";
-        }
-    });
-
-    const modifyNote = (note: Note) => (currentModifyingNote = note);
-    const handleCancel = () => (currentModifyingNote = null);
-
-    const handleModify = () => {
-        if (!currentModifyingNote) {
-            return;
-        }
-
-        if (radioSelection === "rename") {
-            currentModifyingNote.name = inputValue;
-        } else if (radioSelection === "move") {
-            let path = inputValue;
-            path = path.startsWith("/") ? path : "/" + path;
-            path = path.endsWith("/") ? path : path + "/";
-            currentModifyingNote.path = path;
-        } else if (radioSelection === "delete") {
-            notes.splice(notes.indexOf(currentModifyingNote), 1);
-        }
-
-        currentModifyingNote = null;
-    };
-
-    let newNoteModal = $state(false);
-    const INPUT_PLACEHOLDER = "Untitled";
-
-    const openNewNoteModal = () => {
-        inputValue = "";
-        newNoteModal = true;
-    };
-
-    const newNote = () => {
-        const id = window.crypto.randomUUID();
-        const name = inputValue === "" ? INPUT_PLACEHOLDER : inputValue;
-        notes.push({ id, name, path: currentPath, content: EMPTY_CONTENT });
-
-        newNoteModal = false;
-        navigate("/notes/" + id);
-    };
+    let noteMenuModal: NoteMenuModal;
+    let newNoteModal: NewNoteModal;
 
     let searchQuery = $state("");
     let searchResult = $derived(
@@ -95,7 +41,7 @@
 
 <div class="explorer">
     <article>
-        <button class="item" onclick={openNewNoteModal}>New Note</button>
+        <button class="item" onclick={() => newNoteModal.open()}>New Note</button>
         <button class="item" onclick={openSettings}>Settings</button>
     </article>
 
@@ -116,44 +62,22 @@
             {#each visibleNotes as note}
                 <div class="grid">
                     <button class="item" onclick={() => openNote(note.id)}>📝 {note.name}</button>
-                    <button class="item" onclick={() => modifyNote(note)}>⋮</button>
+                    <button class="item" onclick={() => noteMenuModal.open(note)}>⋮</button>
                 </div>
             {/each}
         {:else}
             {#each searchResult as note}
                 <div class="grid">
                     <button class="item" onclick={() => openNote(note.id)}>📝 {note.name}</button>
-                    <button class="item" onclick={() => modifyNote(note)}>⋮</button>
+                    <button class="item" onclick={() => noteMenuModal.open(note)}>⋮</button>
                 </div>
             {/each}
         {/if}
     </article>
 </div>
 
-{#if newNoteModal}
-    <Modal title="New Note" onCancel={() => (newNoteModal = false)} onSubmit={newNote}>
-        <label>
-            <div>Note name</div>
-            <input placeholder={INPUT_PLACEHOLDER} bind:value={inputValue} />
-        </label>
-    </Modal>
-{/if}
-
-{#if currentModifyingNote}
-    <Modal title={currentModifyingNote.name} onCancel={handleCancel} onSubmit={handleModify}>
-        <fieldset>
-            <input id="rename" value="rename" type="radio" bind:group={radioSelection} />
-            <label for="rename">Rename</label>
-
-            <input id="move" value="move" type="radio" bind:group={radioSelection} />
-            <label for="move">Move</label>
-
-            <input id="delete" value="delete" type="radio" bind:group={radioSelection} />
-            <label for="delete">Delete</label>
-        </fieldset>
-        <input disabled={inputDisabled} bind:value={inputValue} />
-    </Modal>
-{/if}
+<NoteMenuModal {notes} bind:this={noteMenuModal} />
+<NewNoteModal {notes} path={currentPath} bind:this={newNoteModal} />
 
 <style>
     .explorer {
