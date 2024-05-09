@@ -1,6 +1,7 @@
 <script lang="ts">
     import { navigate } from "~/libs/router";
     import { notes as notesOrigin, type Note } from "~/libs/mockup";
+    import Modal from "./Modal.svelte";
 
     const STORAGE_KEY = "explorer-path";
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
@@ -94,27 +95,19 @@
 </div>
 
 {#if currentModifyingNote}
-    <dialog open>
-        <article>
-            <h2>{currentModifyingNote.name}</h2>
-            <fieldset>
-                <input id="rename" value="rename" type="radio" bind:group={radioSelection} />
-                <label for="rename">Rename</label>
+    <Modal title={currentModifyingNote.name} onCancel={handleCancel} onSubmit={handleModify}>
+        <fieldset>
+            <input id="rename" value="rename" type="radio" bind:group={radioSelection} />
+            <label for="rename">Rename</label>
 
-                <input id="move" value="move" type="radio" bind:group={radioSelection} />
-                <label for="move">Move</label>
+            <input id="move" value="move" type="radio" bind:group={radioSelection} />
+            <label for="move">Move</label>
 
-                <input id="delete" value="delete" type="radio" bind:group={radioSelection} />
-                <label for="delete">Delete</label>
-            </fieldset>
-            <input disabled={inputDisabled} bind:value={inputValue} />
-
-            <footer>
-                <button class="secondary" onclick={handleCancel}>Cancel</button>
-                <button onclick={handleModify}>Modify</button>
-            </footer>
-        </article>
-    </dialog>
+            <input id="delete" value="delete" type="radio" bind:group={radioSelection} />
+            <label for="delete">Delete</label>
+        </fieldset>
+        <input disabled={inputDisabled} bind:value={inputValue} />
+    </Modal>
 {/if}
 
 <style>
