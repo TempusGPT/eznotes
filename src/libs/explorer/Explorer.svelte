@@ -88,16 +88,9 @@
     };
 
     let searchQuery = $state("");
-    let searchResult = $state<Note[]>([]);
-
-    $effect(() => {
-        if (searchQuery === "") {
-            return;
-        }
-
-        const query = searchQuery.toLowerCase();
-        searchResult = notes.filter(({ name }) => name.toLowerCase().includes(query));
-    });
+    let searchResult = $derived(
+        notes.filter((note) => note.name.toLowerCase().includes(searchQuery.toLowerCase())),
+    );
 </script>
 
 <div class="explorer">
