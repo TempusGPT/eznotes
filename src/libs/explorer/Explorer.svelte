@@ -25,6 +25,10 @@
     );
     const visibleNotes = $derived(notes.filter(({ path }) => path === currentPath));
 
+    const openFolder = (folder: string) => {
+        currentPath += folder + "/";
+    };
+
     const closeFolder = () => {
         const path = currentPath.split("/");
         path.splice(-2, 1);
@@ -51,11 +55,11 @@
 
         {#if searchQuery === ""}
             {#if currentFolder}
-                {@render folderItem("❌", currentFolder, closeFolder)}
+                <button class="item" onclick={closeFolder}>❌ {currentFolder}</button>
             {/if}
 
             {#each visibleFolders as folder}
-                {@render folderItem("📁", folder, () => (currentPath += folder + "/"))}
+                <button class="item" onclick={() => openFolder(folder)}>📁 {folder}</button>
             {/each}
 
             {#each visibleNotes as note}
@@ -71,10 +75,6 @@
 
 <NoteMenuModal {notes} bind:this={noteMenuModal} />
 <NewNoteModal {notes} path={currentPath} bind:this={newNoteModal} />
-
-{#snippet folderItem(emoji: string, name: string, onClick: () => void)}
-    <button class="item" onclick={onClick}>{emoji} {name}</button>
-{/snippet}
 
 {#snippet noteItem(note: Note)}
     <div class="grid">
