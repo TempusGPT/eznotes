@@ -52,6 +52,7 @@
 
     const saveNote = () => {
         const state = JSON.stringify(editor.getEditorState());
+        console.log(state);
         notes
             .filter((note) => note.id === location.params.id)
             .forEach((note) => (note.content = state));

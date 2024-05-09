@@ -1,6 +1,6 @@
 <script lang="ts">
     import { navigate } from "~/libs/router";
-    import { notes as notesOrigin, type Note } from "~/libs/mockup";
+    import { EMPTY_CONTENT, notes as notesOrigin, type Note } from "~/libs/mockup";
     import Modal from "./Modal.svelte";
 
     const STORAGE_KEY = "explorer-path";
@@ -69,10 +69,28 @@
 
         currentModifyingNote = null;
     };
+
+    let newNoteModal = $state(false);
+    const INPUT_PLACEHOLDER = "Untitled";
+
+    const openNewNoteModal = () => {
+        inputValue = "";
+        newNoteModal = true;
+    };
+
+    const newNote = () => {
+        const id = window.crypto.randomUUID();
+        const name = inputValue === "" ? INPUT_PLACEHOLDER : inputValue;
+        notes.push({ id, name, path: currentPath, content: EMPTY_CONTENT });
+
+        newNoteModal = false;
+        navigate("/notes/" + id);
+    };
 </script>
 
 <div class="explorer">
     <article>
+        <button class="item" onclick={openNewNoteModal}>New Note</button>
         <button class="item" onclick={openSettings}>Settings</button>
     </article>
 
@@ -93,6 +111,12 @@
         {/each}
     </article>
 </div>
+
+{#if newNoteModal}
+    <Modal title="New Note" onCancel={() => (newNoteModal = false)} onSubmit={newNote}>
+        <input placeholder={INPUT_PLACEHOLDER} bind:value={inputValue} />
+    </Modal>
+{/if}
 
 {#if currentModifyingNote}
     <Modal title={currentModifyingNote.name} onCancel={handleCancel} onSubmit={handleModify}>
