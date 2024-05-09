@@ -1,6 +1,9 @@
 <script lang="ts" context="module">
+    import type { Note } from "~/libs/mockup.svelte";
+
     export type ExplorerLayoutProps = {
-        content?: string;
+        note: Note;
+        editable?: boolean;
         explorerOnMobile?: boolean;
     };
 </script>
@@ -10,7 +13,7 @@
     import Explorer from "./Explorer.svelte";
     import Editor from "./Editor.svelte";
 
-    let { content, explorerOnMobile = false }: ExplorerLayoutProps = $props();
+    let { note, editable = false, explorerOnMobile = false }: ExplorerLayoutProps = $props();
 </script>
 
 <main class="container-fluid">
@@ -18,12 +21,12 @@
         {#if explorerOnMobile}
             <Explorer />
         {:else}
-            <Editor {content} />
+            <Editor {note} {editable} />
         {/if}
     {:else}
         <div class="grid">
             <Explorer />
-            <Editor {content} />
+            <Editor {note} {editable} />
         </div>
     {/if}
 </main>

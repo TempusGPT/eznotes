@@ -4,11 +4,10 @@
 
 <script lang="ts">
     import { navigate } from "~/libs/router";
-    import { notes as notesOrigin, type Note } from "~/libs/mockup";
+    import { notes, type Note } from "~/libs/mockup.svelte";
     import NoteMenuModal from "./NoteMenuModal.svelte";
     import NewNoteModal from "./NewNoteModal.svelte";
 
-    let notes = $state(notesOrigin);
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
     const currentFolder = $derived(currentPath.split("/").at(-2));
 

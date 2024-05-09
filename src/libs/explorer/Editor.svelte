@@ -1,6 +1,9 @@
 <script lang="ts" context="module">
+    import { type Note } from "~/libs/mockup.svelte";
+
     export type EditorProps = {
-        content?: string;
+        note: Note;
+        editable: boolean;
     };
 </script>
 
@@ -14,10 +17,7 @@
     import { TRANSFORMERS, registerMarkdownShortcuts } from "@lexical/markdown";
     import { mergeRegister } from "@lexical/utils";
 
-    import { location } from "~/libs/router";
-    import { notes } from "~/libs/mockup";
-
-    let { content }: EditorProps = $props();
+    let { note, editable }: EditorProps = $props();
     let element: HTMLElement;
 
     const editor = createEditor({
@@ -44,21 +44,18 @@
     });
 
     $effect(() => {
-        if (content) {
-            const state = editor.parseEditorState(content);
-            editor.setEditorState(state);
-        }
+        const state = editor.parseEditorState(note.content);
+        editor.setEditorState(state);
     });
 
     const saveNote = () => {
         const state = JSON.stringify(editor.getEditorState());
-        notes
-            .filter((note) => note.id === location.params.id)
-            .forEach((note) => (note.content = state));
+        note.content = state;
+        note.lastEdit = Date.now();
     };
 </script>
 
-<article bind:this={element} onblur={saveNote} contenteditable />
+<article bind:this={element} onblur={saveNote} contenteditable={editable} />
 
 <style>
     article {

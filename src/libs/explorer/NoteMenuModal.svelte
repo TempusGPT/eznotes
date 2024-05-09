@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-    import type { Note } from "~/libs/mockup";
+    import type { Note } from "~/libs/mockup.svelte";
 
     let { notes }: NoteMenuModalProps = $props();
     let current = $state<Note>();

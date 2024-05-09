@@ -6,7 +6,7 @@ export type Note = {
     lastEdit: number;
 };
 
-export const notes: Note[] = [
+export const notes = $state<Note[]>([
     {
         id: "75ea8172-3e1b-471a-ab67-b83956a665db",
         path: "/",
@@ -35,6 +35,6 @@ export const notes: Note[] = [
         content: `{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Note in Nested Folder","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"heading","version":1,"tag":"h1"},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"This is note in nested folder.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1,"textFormat":0}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`,
         lastEdit: 3,
     },
-];
+]);
 
 export const EMPTY_CONTENT = `{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0}],"direction":null,"format":"","indent":0,"type":"root","version":1}}`;

@@ -8,7 +8,7 @@
 </script>
 
 <script lang="ts">
-    import { EMPTY_CONTENT, type Note } from "~/libs/mockup";
+    import { EMPTY_CONTENT, type Note } from "~/libs/mockup.svelte";
     import { navigate } from "~/libs/router";
 
     let { notes, path }: NewNoteModalProps = $props();
