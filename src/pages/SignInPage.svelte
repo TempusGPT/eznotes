@@ -1,5 +1,8 @@
-<script>
+<script lang="ts">
     import { device } from "~/libs/media-query";
+    import { supabase } from "~/libs/server/supabase";
+
+    const signIn = () => supabase.auth.signInWithOAuth({ provider: "google" });
 </script>
 
 <main class="container">
@@ -22,7 +25,7 @@
             eius minus perferendis corrupti.
         </p>
 
-        <button class="outline">Continue with Google</button>
+        <button class="outline" onclick={signIn}>Continue with Google</button>
     </div>
 {/snippet}
 

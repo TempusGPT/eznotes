@@ -1,5 +1,8 @@
 <script lang="ts">
     import NoteLayout from "~/libs/note/NoteLayout.svelte";
+    import AuthGuard from "~/libs/server/AuthGuard.svelte";
 </script>
 
-<NoteLayout explorerOnMobile />
+<AuthGuard>
+    <NoteLayout explorerOnMobile />
+</AuthGuard>
