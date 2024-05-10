@@ -28,7 +28,7 @@
 
 {#snippet image()}
     <div class="image">
-        <img src="/assets/favicon.svg" alt="Vite Logo" />
+        <img src="/favicon.svg" alt="Vite logo" />
     </div>
 {/snippet}
 
