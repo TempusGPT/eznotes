@@ -8,11 +8,4 @@ export const auth = {
     async signOut() {
         await supabase.auth.signOut();
     },
-
-    async withdraw() {
-        const res = await supabase.auth.getUser();
-        if (res.data.user) {
-            await supabase.auth.admin.deleteUser(res.data.user.id);
-        }
-    },
 } as const;

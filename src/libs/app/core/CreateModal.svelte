@@ -35,6 +35,7 @@
     <dialog open>
         <article>
             <h2>Create a note</h2>
+
             <label>
                 <div>Name</div>
                 <input placeholder={PLACEHOLDER} bind:value={inputValue} />

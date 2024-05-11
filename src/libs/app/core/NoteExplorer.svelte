@@ -9,7 +9,7 @@
 
 <script lang="ts">
     import { navigate } from "@libs/router";
-    import { notes, type Note } from "@libs/server";
+    import { auth, notes, type Note } from "@libs/server";
     import MenuModal from "./MenuModal.svelte";
     import CreateModal from "./CreateModal.svelte";
 
@@ -39,14 +39,12 @@
 
 <div class="column">
     <article>
+        <input type="search" placeholder="Search" bind:value={searchQuery} />
         <button class="item" onclick={() => createModal.open()}>📝{EN_SPACE}Create a note</button>
-        <button class="item">⚙️{EN_SPACE}Settings</button>
-        <button class="item">🗑️{EN_SPACE}Trash</button>
+        <button class="item" onclick={auth.signOut}>⚙️{EN_SPACE}Sign out</button>
     </article>
 
     <article class="explorer">
-        <input type="search" placeholder="Search" bind:value={searchQuery} />
-
         {#if searchQuery === ""}
             {#if currentFolder}
                 <button class="item" onclick={closeFolder}>
@@ -72,10 +70,11 @@
 </div>
 
 <MenuModal bind:this={menuModal} />
-<CreateModal path={currentPath} bind:this={createModal} />
+<CreateModal bind:this={createModal} path={currentPath} />
 
 {#snippet noteItem(note: Note)}
     {@const button = highlight === note ? "grid highlight" : "grid"}
+
     <div class={button}>
         <button class="item" onclick={() => navigate("/notes/" + note.id)}>
             📝{EN_SPACE}{note.name}
@@ -109,7 +108,7 @@
 
     .item {
         width: 100%;
-        padding: 0.3rem;
+        padding: 0.25rem;
         border: none;
         background-color: transparent;
         text-align: left;

@@ -43,6 +43,7 @@
     <dialog open>
         <article>
             <h2>{current.name}</h2>
+
             <fieldset>
                 <input id="rename" value="rename" type="radio" bind:group={selection} />
                 <label for="rename">Rename</label>
