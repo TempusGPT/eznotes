@@ -1,7 +1,11 @@
-import { supabase } from "./core/supabase";
 import type { Database } from "./core/types";
+import { supabase } from "./core/supabase";
 
 export type Note = Omit<Database["public"]["Tables"]["notes"]["Row"], "owner">;
+
+const EMPTY_CONTENT =
+    '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph"\
+,"version":1,"textFormat":0}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
 
 let value = $state<Note[]>([]);
 
@@ -16,10 +20,6 @@ supabase.auth.onAuthStateChange((_, session) => {
         .eq("owner", session.user.id)
         .then((res) => (value = res.data ?? []));
 });
-
-const EMPTY_CONTENT =
-    '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph"\
-,"version":1,"textFormat":0}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
 
 export const notes = {
     search(query: string) {
@@ -51,29 +51,29 @@ export const notes = {
         };
 
         value.push(note);
-        supabase.from("notes").insert(note);
+        supabase.from("notes").insert(note).then();
         return note.id;
     },
 
     delete(id: string) {
         value = value.filter((note) => note.id !== id);
-        supabase.from("notes").delete().eq("id", id);
+        supabase.from("notes").delete().eq("id", id).then();
     },
 
     editPath(id: string, path: string) {
         path = path.startsWith("/") ? path : "/" + path;
         path = path.endsWith("/") ? path : path + "/";
         value.filter((note) => note.id === id).forEach((note) => (note.path = path));
-        supabase.from("notes").update({ path }).eq("id", id);
+        supabase.from("notes").update({ path }).eq("id", id).then();
     },
 
     editName(id: string, name: string) {
         value.filter((note) => note.id === id).forEach((note) => (note.name = name));
-        supabase.from("notes").update({ name }).eq("id", id);
+        supabase.from("notes").update({ name }).eq("id", id).then();
     },
 
     editContent(id: string, content: string) {
         value.filter((note) => note.id === id).forEach((note) => (note.content = content));
-        supabase.from("notes").update({ content }).eq("id", id);
+        supabase.from("notes").update({ content }).eq("id", id).then();
     },
 } as const;
