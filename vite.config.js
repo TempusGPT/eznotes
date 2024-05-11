@@ -4,9 +4,10 @@ import tsconfigPaths from "vite-tsconfig-paths";
 /** @type {import("vite").UserConfig} */
 export default {
     plugins: [svelte(), tsconfigPaths()],
-    root: "src",
+    root: "./src",
+    publicDir: "./assets",
+    envDir: "../",
     build: {
         outDir: "../dist",
     },
-    publicDir: "./assets",
 };
