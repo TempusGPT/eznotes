@@ -18,7 +18,7 @@
 <main class="container-fluid">
     {#if device.mobile}
         {#if explorerOnMobile}
-            <Explorer />
+            <Explorer highlight={note} />
         {:else if note}
             <Editor {note} />
         {:else}
@@ -26,7 +26,7 @@
         {/if}
     {:else}
         <div class="grid">
-            <Explorer />
+            <Explorer highlight={note} />
             {#if note}
                 <Editor {note} />
             {:else}
@@ -44,6 +44,6 @@
     }
 
     .grid {
-        grid-template-columns: 18em 1fr;
+        grid-template-columns: 18rem 1fr;
     }
 </style>

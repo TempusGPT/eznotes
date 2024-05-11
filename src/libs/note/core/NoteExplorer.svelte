@@ -1,6 +1,10 @@
 <script lang="ts" context="module">
     const STORAGE_KEY = "explorer-path";
     const EN_SPACE = " ";
+
+    export type NoteExplorerProps = {
+        highlight?: Note;
+    };
 </script>
 
 <script lang="ts">
@@ -9,6 +13,7 @@
     import MenuModal from "./MenuModal.svelte";
     import CreateModal from "./CreateModal.svelte";
 
+    let { highlight }: NoteExplorerProps = $props();
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
     $effect(() => sessionStorage.setItem(STORAGE_KEY, currentPath));
 
@@ -70,7 +75,8 @@
 <CreateModal path={currentPath} bind:this={createModal} />
 
 {#snippet noteItem(note: Note)}
-    <div class="grid">
+    {@const button = highlight === note ? "grid highlight" : "grid"}
+    <div class={button}>
         <button class="item" onclick={() => navigate("/notes/" + note.id)}>
             📝{EN_SPACE}{note.name}
         </button>
@@ -91,17 +97,22 @@
         overflow: scroll;
     }
 
+    .grid {
+        grid-template-columns: 1fr auto;
+        gap: 0;
+    }
+
+    .highlight {
+        background-color: var(--pico-secondary-background);
+        border-radius: var(--pico-border-radius);
+    }
+
     .item {
         width: 100%;
-        padding: 0.25em;
+        padding: 0.3rem;
         border: none;
         background-color: transparent;
         text-align: left;
         box-shadow: none;
-    }
-
-    .grid {
-        grid-template-columns: 1fr auto;
-        gap: 0;
     }
 </style>
