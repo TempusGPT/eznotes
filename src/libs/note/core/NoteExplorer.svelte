@@ -32,29 +32,39 @@
     let createModal: CreateModal;
 </script>
 
-<article class="explorer">
-    <input type="search" placeholder="Search" bind:value={searchQuery} />
+<div class="column">
+    <article>
+        <button class="item" onclick={() => createModal.open()}>📝{EN_SPACE}Create a note</button>
+        <button class="item">⚙️{EN_SPACE}Settings</button>
+        <button class="item">🗑️{EN_SPACE}Trash</button>
+    </article>
 
-    {#if searchQuery === ""}
-        {#if currentFolder}
-            <button class="item" onclick={closeFolder}>❌{EN_SPACE}{currentFolder}</button>
+    <article class="explorer">
+        <input type="search" placeholder="Search" bind:value={searchQuery} />
+
+        {#if searchQuery === ""}
+            {#if currentFolder}
+                <button class="item" onclick={closeFolder}>
+                    ❌{EN_SPACE}{currentFolder}
+                </button>
+            {/if}
+
+            {#each visibleFolders as folder}
+                <button class="item" onclick={() => openFolder(folder)}>
+                    📁{EN_SPACE}{folder}
+                </button>
+            {/each}
+
+            {#each visibleNotes as note}
+                {@render noteItem(note)}
+            {/each}
+        {:else}
+            {#each searchResult as note}
+                {@render noteItem(note)}
+            {/each}
         {/if}
-
-        {#each visibleFolders as folder}
-            <button class="item" onclick={() => openFolder(folder)}>📁{EN_SPACE}{folder}</button>
-        {/each}
-
-        {#each visibleNotes as note}
-            {@render noteItem(note)}
-        {/each}
-
-        <button class="item" onclick={() => createModal.open()}>✅{EN_SPACE}New Note</button>
-    {:else}
-        {#each searchResult as note}
-            {@render noteItem(note)}
-        {/each}
-    {/if}
-</article>
+    </article>
+</div>
 
 <MenuModal bind:this={menuModal} />
 <CreateModal path={currentPath} bind:this={createModal} />
@@ -69,8 +79,14 @@
 {/snippet}
 
 <style>
-    .explorer {
+    .column {
+        display: flex;
+        flex-direction: column;
         height: var(--height);
+    }
+
+    .explorer {
+        flex-grow: 1;
         margin: 0;
         overflow: scroll;
     }
