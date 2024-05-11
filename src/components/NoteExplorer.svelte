@@ -5,16 +5,16 @@
 
 <script lang="ts">
     import { navigate } from "~/libs/router";
-    import { foldersOf, notesOf, searchNotes, type Note } from "~/libs/server/notes.svelte";
-    import MenuModal from "./MenuModal.svelte";
-    import CreateModal from "./CreateModal.svelte";
+    import { notes, type Note } from "~/libs/server";
+    import MenuModal from "~/components/MenuModal.svelte";
+    import CreateModal from "~/components/CreateModal.svelte";
 
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
     $effect(() => sessionStorage.setItem(STORAGE_KEY, currentPath));
 
     const currentFolder = $derived(currentPath.split("/").at(-2));
-    const visibleFolders = $derived(foldersOf(currentPath));
-    const visibleNotes = $derived(notesOf(currentPath));
+    const visibleFolders = $derived(notes.findFoldersByPath(currentPath));
+    const visibleNotes = $derived(notes.findByPath(currentPath));
 
     const openFolder = (folder: string) => {
         currentPath += folder + "/";
@@ -27,7 +27,7 @@
     };
 
     let searchQuery = $state("");
-    let searchResult = $derived(searchNotes(searchQuery));
+    let searchResult = $derived(notes.search(searchQuery));
     let menuModal: MenuModal;
     let createModal: CreateModal;
 </script>

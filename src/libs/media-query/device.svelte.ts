@@ -20,4 +20,4 @@ export const device = {
     get desktop() {
         return isDesktop;
     },
-};
+} as const;

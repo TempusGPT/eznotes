@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { deleteNote, moveNote, renameNote, type Note } from "~/libs/server/notes.svelte";
+    import { type Note, notes } from "~/libs/server";
 
     let current = $state<Note>();
     let selection = $state("rename");
@@ -25,11 +25,11 @@
         }
 
         if (selection === "rename") {
-            renameNote(current.id, inputValue);
+            notes.editName(current.id, inputValue);
         } else if (selection === "move") {
-            moveNote(current.id, inputValue);
+            notes.editPath(current.id, inputValue);
         } else if (selection === "delete") {
-            deleteNote(current.id);
+            notes.delete(current.id);
         }
 
         current = undefined;

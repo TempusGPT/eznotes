@@ -6,13 +6,25 @@ export type Auth = {
     user?: User;
 };
 
-export const auth = $state<Auth>({ done: false });
-
-supabase.auth.getSession().then((res) => {
-    auth.done = true;
-    auth.user = res.data.session?.user;
-});
+let ready = $state(false);
+let user = $state<User>();
 
 supabase.auth.onAuthStateChange((_, session) => {
-    auth.user = session?.user;
+    user = session?.user;
+    ready = true;
 });
+
+export const auth = {
+    get ready() {
+        return ready;
+    },
+    get user() {
+        return user;
+    },
+    async signIn() {
+        await supabase.auth.signInWithOAuth({ provider: "google" });
+    },
+    async signOut() {
+        await supabase.auth.signOut();
+    },
+} as const;

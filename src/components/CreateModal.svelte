@@ -8,7 +8,7 @@
 
 <script lang="ts">
     import { navigate } from "~/libs/router";
-    import { createNote } from "~/libs/server/notes.svelte";
+    import { notes } from "~/libs/server";
 
     let { path }: NewNoteModalProps = $props();
     let isOpened = $state(false);
@@ -16,7 +16,7 @@
 
     const create = async () => {
         const name = inputValue === "" ? PLACEHOLDER : inputValue;
-        const id = await createNote(path, name);
+        const id = await notes.create(path, name);
         isOpened = false;
 
         if (id) {

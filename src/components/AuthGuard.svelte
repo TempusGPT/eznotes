@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
     import type { Snippet } from "svelte";
     import { navigate } from "~/libs/router";
-    import { auth } from "./auth.svelte";
+    import { auth } from "~/libs/server";
 
     export type AuthGuardProps = {
         children: Snippet;
@@ -12,7 +12,7 @@
     let { children }: AuthGuardProps = $props();
 </script>
 
-{#if auth.done}
+{#if auth.ready}
     {#if auth.user}
         {@render children()}
     {:else}

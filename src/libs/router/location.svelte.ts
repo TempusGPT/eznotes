@@ -31,4 +31,4 @@ export const location = {
     get params() {
         return paramsValue;
     },
-};
+} as const;
