@@ -1,5 +1,3 @@
-import { createClient } from "@supabase/supabase-js";
-
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
@@ -118,8 +116,3 @@ export type Enums<
     : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
       ? PublicSchema["Enums"][PublicEnumNameOrOptions]
       : never;
-
-export const supabase = createClient<Database>(
-    import.meta.env.VITE_SUPABASE_URL,
-    import.meta.env.VITE_SUPABASE_KEY,
-);

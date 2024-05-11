@@ -2,7 +2,7 @@
     import type { Snippet } from "svelte";
     import type { User } from "@supabase/supabase-js";
     import { navigate } from "@libs/router";
-    import { supabase } from "./supabase";
+    import { supabase } from "./core/supabase";
 
     export type AuthGuardProps = {
         children: Snippet;

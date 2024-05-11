@@ -1,4 +1,5 @@
-import { supabase, type Database } from "./supabase";
+import { supabase } from "./core/supabase";
+import type { Database } from "./core/types";
 
 export type Note = Omit<Database["public"]["Tables"]["notes"]["Row"], "owner">;
 
