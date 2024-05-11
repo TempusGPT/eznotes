@@ -14,14 +14,11 @@
     let isOpened = $state(false);
     let inputValue = $state("");
 
-    const create = async () => {
+    const create = () => {
         const name = inputValue === "" ? PLACEHOLDER : inputValue;
-        const id = await notes.create(path, name);
+        const id = notes.create(path, name);
         isOpened = false;
-
-        if (id) {
-            navigate("/notes/" + id);
-        }
+        navigate("/notes/" + id);
     };
 
     export const open = () => {

@@ -1,84 +1,78 @@
-import type { Database } from "./types";
-import { supabase } from "./supabase";
+import { supabase, type Database } from "./supabase";
 
 export type Note = Omit<Database["public"]["Tables"]["notes"]["Row"], "owner">;
 
-let notesState = $state<Note[]>([]);
+let value = $state<Note[]>([]);
 
-supabase.auth.getSession().then((res) => {
-    const user = res.data.session?.user;
+supabase.auth.onAuthStateChange((_, session) => {
+    if (!session) {
+        return;
+    }
 
     supabase
-        .schema("public")
         .from("notes")
         .select("*")
-        .eq("owner", user?.id ?? "")
-        .then((res) => (notesState = res.data ?? []));
+        .eq("owner", session.user.id)
+        .then((res) => (value = res.data ?? []));
 });
+
+const EMPTY_CONTENT =
+    '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph"\
+,"version":1,"textFormat":0}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
 
 export const notes = {
     search(query: string) {
-        return notesState.filter((note) => note.name.toLowerCase().includes(query.toLowerCase()));
+        return value.filter((note) => note.name.toLowerCase().includes(query.toLowerCase()));
     },
 
     findById(id: string) {
-        return notesState.find((note) => note.id === id);
+        return value.find((note) => note.id === id);
     },
 
     findByPath(path: string) {
-        return notesState.filter((note) => note.path === path);
+        return value.filter((note) => note.path === path);
     },
 
-    findFoldersByPath(path: string): Set<string> {
+    findFoldersByPath(path: string) {
         return new Set(
-            notesState
+            value
                 .filter((note) => note.path !== path && note.path.startsWith(path))
                 .map((note) => note.path.replace(path, "").split("/")[0]),
         );
     },
 
-    async create(path: string, name: string) {
-        const { data } = await supabase
-            .from("notes")
-            .insert({ path, name })
-            .select("*")
-            .maybeSingle();
-        if (!data) {
-            return;
-        }
+    create(path: string, name: string) {
+        const note: Note = {
+            id: window.crypto.randomUUID(),
+            path,
+            name,
+            content: EMPTY_CONTENT,
+        };
 
-        notesState.push(data);
-        return data.id;
+        value.push(note);
+        supabase.from("notes").insert(note);
+        return note.id;
     },
 
-    async delete(id: string) {
-        notesState = notesState.filter((note) => note.id !== id);
-        await supabase.from("notes").delete().eq("id", id);
+    delete(id: string) {
+        value = value.filter((note) => note.id !== id);
+        supabase.from("notes").delete().eq("id", id);
     },
 
-    async editPath(id: string, path: string) {
-        const note = notesState.find((note) => note.id === id);
-        if (note) {
-            path = path.startsWith("/") ? path : "/" + path;
-            path = path.endsWith("/") ? path : path + "/";
-            note.path = path;
-            await supabase.from("notes").update({ path }).eq("id", id);
-        }
+    editPath(id: string, path: string) {
+        path = path.startsWith("/") ? path : "/" + path;
+        path = path.endsWith("/") ? path : path + "/";
+        value.filter((note) => note.id === id).forEach((note) => (note.path = path));
+        supabase.from("notes").update({ path }).eq("id", id);
     },
 
-    async editName(id: string, name: string) {
-        const note = notesState.find((note) => note.id === id);
-        if (note) {
-            note.name = name;
-            await supabase.from("notes").update({ name }).eq("id", id);
-        }
+    editName(id: string, name: string) {
+        value.filter((note) => note.id === id).forEach((note) => (note.name = name));
+        supabase.from("notes").update({ name }).eq("id", id);
     },
 
-    async editContent(id: string, content: string) {
-        const note = notesState.find((note) => note.id === id);
-        if (note) {
-            note.content = content;
-            await supabase.from("notes").update({ content }).eq("id", id);
-        }
+    editContent(id: string, content: string) {
+        value.filter((note) => note.id === id).forEach((note) => (note.content = content));
+        supabase.from("notes").update({ content }).eq("id", id);
     },
 } as const;
