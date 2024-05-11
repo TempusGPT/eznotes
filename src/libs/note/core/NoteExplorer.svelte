@@ -13,8 +13,8 @@
     $effect(() => sessionStorage.setItem(STORAGE_KEY, currentPath));
 
     const currentFolder = $derived(currentPath.split("/").at(-2));
-    const visibleFolders = $derived(notes.findFoldersByPath(currentPath));
-    const visibleNotes = $derived(notes.findByPath(currentPath));
+    const visibleFolders = $derived(notes.foldersOnPath(currentPath));
+    const visibleNotes = $derived(notes.notesOnPath(currentPath));
 
     const openFolder = (folder: string) => {
         currentPath += folder + "/";

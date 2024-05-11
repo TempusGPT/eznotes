@@ -12,25 +12,26 @@ supabase.auth.onAuthStateChange((_, session) => {
 
     supabase
         .from("notes")
-        .select("*")
+        .select("id, path, name, content")
         .eq("owner", session.user.id)
+        .order("path, name")
         .then((res) => (value = res.data ?? []));
 });
 
 export const notes = {
+    find(id: string) {
+        return value.find((note) => note.id === id);
+    },
+
     search(query: string) {
         return value.filter((note) => note.name.toLowerCase().includes(query.toLowerCase()));
     },
 
-    findById(id: string) {
-        return value.find((note) => note.id === id);
-    },
-
-    findByPath(path: string) {
+    notesOnPath(path: string) {
         return value.filter((note) => note.path === path);
     },
 
-    findFoldersByPath(path: string) {
+    foldersOnPath(path: string) {
         return new Set(
             value
                 .filter((note) => note.path !== path && note.path.startsWith(path))
@@ -47,6 +48,7 @@ export const notes = {
         };
 
         value.push(note);
+        value.sort((a, b) => a.path.localeCompare(b.path) || a.name.localeCompare(b.name));
         supabase.from("notes").insert(note).then();
         return note.id;
     },
@@ -59,12 +61,15 @@ export const notes = {
     editPath(id: string, path: string) {
         path = path.startsWith("/") ? path : "/" + path;
         path = path.endsWith("/") ? path : path + "/";
+
         value.filter((note) => note.id === id).forEach((note) => (note.path = path));
+        value.sort((a, b) => a.path.localeCompare(b.path) || a.name.localeCompare(b.name));
         supabase.from("notes").update({ path }).eq("id", id).then();
     },
 
     editName(id: string, name: string) {
         value.filter((note) => note.id === id).forEach((note) => (note.name = name));
+        value.sort((a, b) => a.path.localeCompare(b.path) || a.name.localeCompare(b.name));
         supabase.from("notes").update({ name }).eq("id", id).then();
     },
 
