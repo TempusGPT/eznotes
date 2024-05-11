@@ -9,8 +9,8 @@
 
 <script lang="ts">
     import { device } from "@libs/media-query";
-    import Explorer from "./NoteExplorer.svelte";
-    import Editor from "./NoteEditor.svelte";
+    import Explorer from "./core/NoteExplorer.svelte";
+    import Editor from "./core/NoteEditor.svelte";
 
     let { note, explorerOnMobile = false }: ExplorerLayoutProps = $props();
 </script>
