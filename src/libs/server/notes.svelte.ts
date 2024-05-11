@@ -1,18 +1,20 @@
-export type Note = {
-    id: string;
-    path: string;
-    name: string;
-    content: string;
-};
+import type { Database } from "./types";
+import { supabase } from "./supabase";
 
-const EMPTY_CONTENT =
-    '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph"\
-    ,"version":1,"textFormat":0}],"direction":null,"format":"","indent":0,"type":"root","version":1\
-    }}';
+export type Note = Omit<Database["public"]["Tables"]["notes"]["Row"], "owner">;
 
-let notes = $state<Note[]>(JSON.parse(localStorage.getItem("notes") ?? "[]"));
+let notes = $state<Note[]>([]);
 
-export const EMPTY_NOTE = { id: "", path: "", name: "", content: EMPTY_CONTENT } as const;
+supabase.auth.getSession().then((res) => {
+    const user = res.data.session?.user;
+
+    supabase
+        .schema("public")
+        .from("notes")
+        .select("*")
+        .eq("owner", user?.id ?? "")
+        .then((res) => (notes = res.data ?? []));
+});
 
 export const findNote = (id: string) => {
     return notes.find((note) => note.id === id);
@@ -34,40 +36,43 @@ export const foldersOf = (path: string): Set<string> => {
     );
 };
 
-export const createNote = (path: string, name: string) => {
-    const id = window.crypto.randomUUID();
-    notes.push({ id, path, name, content: EMPTY_CONTENT });
-    localStorage.setItem("notes", JSON.stringify(notes));
-    return id;
+export const createNote = async (path: string, name: string) => {
+    const { data } = await supabase.from("notes").insert({ path, name }).select("*").maybeSingle();
+    if (!data) {
+        return;
+    }
+
+    notes.push(data);
+    return data.id;
 };
 
-export const editNote = (id: string, content: string) => {
+export const editNote = async (id: string, content: string) => {
     const note = notes.find((note) => note.id === id);
     if (note) {
         note.content = content;
-        localStorage.setItem("notes", JSON.stringify(notes));
+        await supabase.from("notes").update({ content }).eq("id", id);
     }
 };
 
-export const renameNote = (id: string, name: string) => {
+export const renameNote = async (id: string, name: string) => {
     const note = notes.find((note) => note.id === id);
     if (note) {
         note.name = name;
-        localStorage.setItem("notes", JSON.stringify(notes));
+        await supabase.from("notes").update({ name }).eq("id", id);
     }
 };
 
-export const moveNote = (id: string, path: string) => {
+export const moveNote = async (id: string, path: string) => {
     const note = notes.find((note) => note.id === id);
     if (note) {
         path = path.startsWith("/") ? path : "/" + path;
         path = path.endsWith("/") ? path : path + "/";
         note.path = path;
-        localStorage.setItem("notes", JSON.stringify(notes));
+        await supabase.from("notes").update({ path }).eq("id", id);
     }
 };
 
-export const deleteNote = (id: string) => {
+export const deleteNote = async (id: string) => {
     notes = notes.filter((note) => note.id !== id);
-    localStorage.setItem("notes", JSON.stringify(notes));
+    await supabase.from("notes").delete().eq("id", id);
 };

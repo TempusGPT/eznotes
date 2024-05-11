@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { EMPTY_NOTE, type Note } from "~/libs/server/notes.svelte";
+    import type { Note } from "~/libs/server/notes.svelte";
 
     export type ExplorerLayoutProps = {
         note?: Note;
@@ -22,7 +22,7 @@
         {:else if note}
             <Editor {note} />
         {:else}
-            <Editor note={EMPTY_NOTE} readonly />
+            <Editor readonly />
         {/if}
     {:else}
         <div class="grid">
@@ -30,7 +30,7 @@
             {#if note}
                 <Editor {note} />
             {:else}
-                <Editor note={EMPTY_NOTE} readonly />
+                <Editor readonly />
             {/if}
         </div>
     {/if}

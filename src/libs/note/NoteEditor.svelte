@@ -2,7 +2,7 @@
     import { editNote, type Note } from "~/libs/server/notes.svelte";
 
     export type EditorProps = {
-        note: Note;
+        note?: Note;
         readonly?: boolean;
     };
 </script>
@@ -44,18 +44,24 @@
     });
 
     $effect(() => {
-        const state = editor.parseEditorState(note.content);
-        editor.setEditorState(state);
+        if (note) {
+            const state = editor.parseEditorState(note.content);
+            editor.setEditorState(state);
+        }
     });
 
     const saveNote = () => {
-        const state = JSON.stringify(editor.getEditorState());
-        editNote(note.id, state);
+        if (note) {
+            const state = JSON.stringify(editor.getEditorState());
+            editNote(note.id, state);
+        }
     };
 </script>
 
 <article>
-    <h1>{note.name}</h1>
+    {#if note}
+        <h1>{note.name}</h1>
+    {/if}
     <div bind:this={element} onblur={saveNote} contenteditable={!readonly} />
 </article>
 
