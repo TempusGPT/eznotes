@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
     import { type Note, notes } from "@libs/server";
 
-    export type EditorProps = {
+    export type NoteEditorProps = {
         note?: Note;
         readonly?: boolean;
     };
@@ -17,7 +17,7 @@
     import { TRANSFORMERS, registerMarkdownShortcuts } from "@lexical/markdown";
     import { mergeRegister } from "@lexical/utils";
 
-    let { note, readonly = false }: EditorProps = $props();
+    let { note, readonly = false }: NoteEditorProps = $props();
     let element: HTMLElement;
 
     const editor = createEditor({

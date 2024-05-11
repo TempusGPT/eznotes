@@ -1,8 +1,8 @@
 <script lang="ts">
     import { AuthGuard } from "@libs/server";
-    import { NoteLayout } from "@libs/note";
+    import { App } from "@libs/app";
 </script>
 
 <AuthGuard>
-    <NoteLayout explorerOnMobile />
+    <App mobile="explorer" />
 </AuthGuard>

@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    export type NewNoteModalProps = {
+    export type CreateModal = {
         path: string;
     };
 
@@ -10,7 +10,7 @@
     import { navigate } from "@libs/router";
     import { notes } from "@libs/server";
 
-    let { path }: NewNoteModalProps = $props();
+    let { path }: CreateModal = $props();
     let isOpened = $state(false);
     let inputValue = $state("");
 
@@ -34,7 +34,7 @@
 {#if isOpened}
     <dialog open>
         <article>
-            <h2>New Note</h2>
+            <h2>Create a note</h2>
             <label>
                 <div>Name</div>
                 <input placeholder={PLACEHOLDER} bind:value={inputValue} />
