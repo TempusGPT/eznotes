@@ -7,8 +7,8 @@
 </script>
 
 <script lang="ts">
-    import { navigate } from "~/libs/router";
-    import { notes } from "~/libs/server";
+    import { navigate } from "@libs/router";
+    import { notes } from "@libs/server";
 
     let { path }: NewNoteModalProps = $props();
     let isOpened = $state(false);

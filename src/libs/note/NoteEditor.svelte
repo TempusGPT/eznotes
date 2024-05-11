@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { type Note, notes } from "~/libs/server";
+    import { type Note, notes } from "@libs/server";
 
     export type EditorProps = {
         note?: Note;

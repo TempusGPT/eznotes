@@ -1,6 +1,6 @@
 <script lang="ts">
-    import NoteLayout from "~/components/NoteLayout.svelte";
-    import AuthGuard from "~/components/AuthGuard.svelte";
+    import { AuthGuard } from "@libs/server";
+    import { NoteLayout } from "@libs/note";
 </script>
 
 <AuthGuard>

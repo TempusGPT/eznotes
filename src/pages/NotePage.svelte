@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { notes } from "~/libs/server";
-    import { location } from "~/libs/router";
-    import NoteLayout from "~/components/NoteLayout.svelte";
-    import AuthGuard from "~/components/AuthGuard.svelte";
+    import { notes } from "@libs/server";
+    import { location } from "@libs/router";
+    import { AuthGuard } from "@libs/server";
+    import { NoteLayout } from "@libs/note";
 
     const note = $derived(notes.findById(location.params.id));
 </script>

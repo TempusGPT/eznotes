@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { type Note, notes } from "~/libs/server";
+    import { type Note, notes } from "@libs/server";
 
     let current = $state<Note>();
     let selection = $state("rename");

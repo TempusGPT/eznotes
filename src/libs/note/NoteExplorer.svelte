@@ -4,10 +4,10 @@
 </script>
 
 <script lang="ts">
-    import { navigate } from "~/libs/router";
-    import { notes, type Note } from "~/libs/server";
-    import MenuModal from "~/components/MenuModal.svelte";
-    import CreateModal from "~/components/CreateModal.svelte";
+    import { navigate } from "@libs/router";
+    import { notes, type Note } from "@libs/server";
+    import MenuModal from "./MenuModal.svelte";
+    import CreateModal from "./CreateModal.svelte";
 
     let currentPath = $state(sessionStorage.getItem(STORAGE_KEY) ?? "/");
     $effect(() => sessionStorage.setItem(STORAGE_KEY, currentPath));

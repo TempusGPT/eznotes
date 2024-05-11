@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import type { Note } from "~/libs/server";
+    import type { Note } from "@libs/server";
 
     export type ExplorerLayoutProps = {
         note?: Note;
@@ -8,9 +8,9 @@
 </script>
 
 <script lang="ts">
-    import { device } from "~/libs/media-query";
-    import Explorer from "~/components/NoteExplorer.svelte";
-    import Editor from "~/components/NoteEditor.svelte";
+    import { device } from "@libs/media-query";
+    import Explorer from "./NoteExplorer.svelte";
+    import Editor from "./NoteEditor.svelte";
 
     let { note, explorerOnMobile = false }: ExplorerLayoutProps = $props();
 </script>

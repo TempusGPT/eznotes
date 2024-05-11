@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { device } from "~/libs/media-query";
-    import { auth } from "~/libs/server";
+    import { device } from "@libs/media-query";
+    import { auth } from "@libs/server";
 </script>
 
 <main class="container">
