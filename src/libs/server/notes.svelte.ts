@@ -3,10 +3,6 @@ import { supabase } from "./core/supabase";
 
 export type Note = Omit<Database["public"]["Tables"]["notes"]["Row"], "owner">;
 
-const EMPTY_CONTENT =
-    '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph"\
-,"version":1,"textFormat":0}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
-
 let value = $state<Note[]>([]);
 
 supabase.auth.onAuthStateChange((_, session) => {
@@ -47,7 +43,7 @@ export const notes = {
             id: window.crypto.randomUUID(),
             path,
             name,
-            content: EMPTY_CONTENT,
+            content: import.meta.env.VITE_EMPTY_CONTENT,
         };
 
         value.push(note);
