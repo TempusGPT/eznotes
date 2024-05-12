@@ -8,52 +8,36 @@
 </script>
 
 <script lang="ts">
-    import { createEditor } from "lexical";
-    import { HeadingNode, QuoteNode, registerRichText } from "@lexical/rich-text";
-    import { CodeHighlightNode, CodeNode, registerCodeHighlighting } from "@lexical/code";
-    import { ListNode, ListItemNode } from "@lexical/list";
-    import { LinkNode } from "@lexical/link";
-    import { createEmptyHistoryState, registerHistory } from "@lexical/history";
-    import { TRANSFORMERS, registerMarkdownShortcuts } from "@lexical/markdown";
-    import { mergeRegister } from "@lexical/utils";
+    import {
+        codePlugin,
+        useLexical,
+        historyPlugin,
+        linkPlugin,
+        listPlugin,
+        markdownPlugin,
+        richTextPlugin,
+    } from "@libs/lexical";
 
     let { note, readonly = false }: NoteEditorProps = $props();
-    let element: HTMLElement;
 
-    const editor = createEditor({
-        nodes: [
-            HeadingNode,
-            QuoteNode,
-            CodeNode,
-            CodeHighlightNode,
-            ListNode,
-            ListItemNode,
-            LinkNode,
-        ],
-    });
-
-    $effect(() => {
-        editor.setRootElement(element);
-
-        return mergeRegister(
-            registerRichText(editor),
-            registerCodeHighlighting(editor),
-            registerMarkdownShortcuts(editor, TRANSFORMERS),
-            registerHistory(editor, createEmptyHistoryState(), 1000),
-        );
-    });
+    const lexical = useLexical(
+        codePlugin,
+        historyPlugin,
+        linkPlugin,
+        listPlugin,
+        markdownPlugin,
+        richTextPlugin,
+    );
 
     $effect(() => {
         if (note) {
-            const state = editor.parseEditorState(note.content);
-            editor.setEditorState(state);
+            lexical.setContent(note.content);
         }
     });
 
     const saveNote = () => {
         if (note) {
-            const state = JSON.stringify(editor.getEditorState());
-            notes.editContent(note.id, state);
+            notes.editContent(note.id, lexical.content());
         }
     };
 </script>
@@ -62,7 +46,7 @@
     {#if note}
         <h1>{note.name}</h1>
     {/if}
-    <div bind:this={element} onblur={saveNote} contenteditable={!readonly} />
+    <div use:lexical contenteditable={!readonly} onblur={saveNote} />
 </article>
 
 <style>
