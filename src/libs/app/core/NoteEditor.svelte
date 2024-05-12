@@ -29,17 +29,22 @@
         richTextPlugin(),
     );
 
-    $effect(() => {
-        if (note) {
-            lexical.setContent(note.content);
-        }
-    });
-
     const saveNote = () => {
         if (note) {
             notes.editContent(note.id, lexical.content());
         }
     };
+
+    $effect(() => {
+        window.addEventListener("beforeunload", saveNote);
+        return () => window.removeEventListener("beforeunload", saveNote);
+    });
+
+    $effect(() => {
+        if (note) {
+            lexical.setContent(note.content);
+        }
+    });
 </script>
 
 <article>
