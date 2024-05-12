@@ -1,7 +1,9 @@
 import { createEmptyHistoryState, registerHistory } from "@lexical/history";
 import type { Plugin } from "./types";
 
-export const historyPlugin: Plugin = {
+export const historyPlugin = (delay: number): Plugin => ({
     nodes: [],
-    register: (editor) => registerHistory(editor, createEmptyHistoryState(), 1000),
-};
+    register(editor) {
+        return [registerHistory(editor, createEmptyHistoryState(), delay)];
+    },
+});

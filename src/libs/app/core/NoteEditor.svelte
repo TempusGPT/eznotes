@@ -21,12 +21,12 @@
     let { note, readonly = false }: NoteEditorProps = $props();
 
     const lexical = useLexical(
-        codePlugin,
-        historyPlugin,
-        linkPlugin,
-        listPlugin,
-        markdownPlugin,
-        richTextPlugin,
+        codePlugin(),
+        historyPlugin(1000),
+        linkPlugin(),
+        listPlugin(),
+        markdownPlugin(),
+        richTextPlugin(),
     );
 
     $effect(() => {
