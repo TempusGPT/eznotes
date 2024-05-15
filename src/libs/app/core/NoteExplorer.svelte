@@ -73,13 +73,14 @@
 <CreateModal bind:this={createModal} path={currentPath} />
 
 {#snippet noteItem(note: Note)}
-    {@const button = highlight === note ? "grid highlight" : "grid"}
+    {@const grid = note === highlight ? "grid highlight" : "grid"}
+    {@const item = note === highlight ? "item highlight" : "item"}
 
-    <div class={button}>
-        <button class="item" onclick={() => navigate("/notes/" + note.id)}>
+    <div class={grid}>
+        <button class={item} onclick={() => navigate("/notes/" + note.id)}>
             📝{EN_SPACE}{note.name}
         </button>
-        <button class="item" onclick={() => menuModal.open(note)}>⋮</button>
+        <button class={item} onclick={() => menuModal.open(note)}>⋮</button>
     </div>
 {/snippet}
 
@@ -99,10 +100,6 @@
     .grid {
         grid-template-columns: 1fr auto;
         gap: 0;
-    }
-
-    .highlight {
-        background-color: var(--pico-secondary-background);
         border-radius: var(--pico-border-radius);
     }
 
@@ -111,7 +108,14 @@
         padding: 0.25rem;
         border: none;
         background-color: transparent;
+        color: var(--pico-dropdown-color);
         text-align: left;
         box-shadow: none;
+        transition: none;
+    }
+
+    .highlight {
+        background-color: var(--pico-secondary-background);
+        color: var(--pico-secondary-inverse);
     }
 </style>
